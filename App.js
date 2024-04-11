@@ -32,31 +32,6 @@ export default function App() {
           options={{ title: 'Listado de biomarcadores' }} // Set the title of the header
         />
         <Stack.Screen
-          name="4kscore"
-          component={AKscoreScreen}
-          options={{ title: 'Calicreínas' }} // Set the title of the header
-        />
-        <Stack.Screen
-          name="selectmdx"
-          component={SelectmdxScreen}
-          options={{ title: 'Panel genético basado en ARNm' }} // Set the title of the header
-        />
-        <Stack.Screen
-          name="confirmmdx"
-          component={ConfirmmdxScreen}
-          options={{ title: 'Estudios Epigenéticos' }} // Set the title of the header
-        />
-        <Stack.Screen
-          name="oncotype"
-          component={OncotypeScreen}
-          options={{ title: 'Genomic Prostate Score (GPS)' }} // Set the title of the header
-        />
-        <Stack.Screen
-          name="decipher"
-          component={DecipherScreen}
-          options={{ title: 'Genomic Classifier (GC)' }} // Set the title of the header
-        />
-        <Stack.Screen
           name="buscador"
           component={SearchScreen}
           options={{ title: 'Buscador' }} // Set the title of the header
@@ -71,13 +46,18 @@ export default function App() {
           component={FormularioScreen}
           options={{ title: 'Generar Formulario' }} // Set the title of the header
         />
+        <Stack.Screen
+          name="tests"
+          component={TestScreen}
+          options={{ title: 'Test' }} // Set the title of the header
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 
-//Screens
+//Principal Screens
 const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -141,7 +121,9 @@ const ListadoScreen = ({ navigation }) => {
       <Text style={styles.title}>OPCIONES</Text>
       <TouchableOpacity
         style={styles.buttonListado}
-        onPress={() => navigation.navigate('4kscore')}>
+        onPress={() => navigation.navigate('tests', {
+          testName: "4KScore"
+        })}>
         <View style={styles.buttonListadoContent}>
           <Image
             source={require('./assets/4kscore.png')}
@@ -152,7 +134,9 @@ const ListadoScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonListado}
-        onPress={() => navigation.navigate('selectmdx')}>
+        onPress={() => navigation.navigate('tests', {
+          testName: "SelectMDX"
+        })}>
         <View style={styles.buttonListadoContent}>
           <Image
             source={require('./assets/selectmdx.png')}
@@ -163,7 +147,9 @@ const ListadoScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonListado}
-        onPress={() => navigation.navigate('confirmmdx')}>
+        onPress={() => navigation.navigate('tests', {
+          testName: "ConfirmMDX"
+        })}>
         <View style={styles.buttonListadoContent}>
           <Image
             source={require('./assets/confirmmdx.png')}
@@ -174,7 +160,9 @@ const ListadoScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonListado}
-        onPress={() => navigation.navigate('oncotype')}>
+        onPress={() => navigation.navigate('tests', {
+          testName: "Oncotype"
+        })}>
         <View style={styles.buttonListadoContent}>
           <Image
             source={require('./assets/oncotype.png')}
@@ -185,7 +173,9 @@ const ListadoScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonListado}
-        onPress={() => navigation.navigate('decipher')}>
+        onPress={() => navigation.navigate('tests', {
+          testName: "Decipher"
+        })}>
         <View style={styles.buttonListadoContent}>
           <Image
             source={require('./assets/decipher.png')}
@@ -253,7 +243,7 @@ const FormularioScreen = () => {
 
   return(
     <View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainerFromul}>
       <View styles={styles.pdfContainer}>
         <Text>Dia y hora de extracción de muestra :</Text>
         <TextInput style={styles.inputText} value={fecha} placeholder='fecha' onChangeText={(value) => setFecha(value)} />
@@ -384,9 +374,43 @@ const FormularioScreen = () => {
   );
 }
 
-//test screens
-const AKscoreScreen = () => {
+//Test Screens
+
+const TestScreen = ({navigation, route}) =>{
+  const { testName } = route.params
+  var data = require(`./assets/testsData.json`);
   const [selectedTab, setSelectedTab] = useState(1); // State to track the selected tab
+  const [test, setTest] = useState(null);
+
+  useEffect(() => {
+    // Find the test object by testName
+    const foundTest = data.find(data => data.testName === testName);
+    
+    // Set the test object if found
+    if (foundTest) {
+      setTest(foundTest);
+    }
+  }, [testName]);
+
+
+  
+  let imageSource;
+  if (test && test.testName === '4KScore') {
+    let AKScoreImage = require('./assets/4kscore.png')
+    imageSource = AKScoreImage;
+  } else if (test && test.testName === 'SelectMDX') {
+    let SelectMDXImage = require('./assets/selectmdx.png')
+    imageSource = SelectMDXImage;
+  } else if (test && test.testName === 'ConfirmMDX') {
+    let ConrmMDXImage = require('./assets/confirmmdx.png')
+    imageSource = ConrmMDXImage;
+  } else if (test && test.testName === 'Oncotype') {
+    let OncotypeImage = require('./assets/oncotype.png')
+    imageSource = OncotypeImage;
+  } else if (test && test.testName === 'Decipher') {
+    let DecipherImage = require('./assets/decipher.png')
+    imageSource = DecipherImage;
+  }
 
   const handleTabPress = (tabNumber) => {
     setSelectedTab(tabNumber); // Update the selected tab state
@@ -397,32 +421,9 @@ const AKscoreScreen = () => {
     case 1:
       tabContent = (
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {test && (
           <Text style={styles.tabContentText}>
-              El test 4Kscore analiza en sangre el PSA, PSA libre, PSA intacto y calicreína Humana 2 sumado a la edad y tacto rectal.
-              Expresa el % de riesgo de cáncer de próstata agresivo.
-              {"\n\n"} {/* New line */}
-              Mejora el valor predictivo positivo del PSA, disminuye el número de biopsias innecesarias.
-              {"\n\n"}
-              Punto de corte 7,5 % para decidir la realización de la biopsia
-              {"\n\n"}
-              Menor a 7,5%, control evolutivo, bajo
-              riesgo de un tumor significativo.
-              {"\n\n"}
-              Ventajas:{"\n"}
-              1. Método no invasivo (muestra de sangre){"\n"}
-              2. Evita biopsias innecesarias (30-60%){"\n"}
-              3. Superior al PSA, PSA L/Total y PSA D para diagnosticar CaP{"\n"}
-              4. Capacidad de predecir CaP Gleason 7 o mayor
-              {"\n\n"}
-              Desventajas:{"\n"}
-              1. Mayores costos{"\n"}
-              2. Resultados se afectan por inhibidores de la 5 alfa reductasa. Requiere interrupción del tratamiento por 6 meses
-              {"\n\n"}
-              Referencias:{"\n"}
-              1. Mayores costos{"\n"}
-              2. Resultados se afectan por inhibidores de la 5 alfa reductasa. Requiere interrupción del tratamiento por 6 meses
-              {"\n\n"}
-              Solicitar referencias a{" "}
+              {test.informacion}
               <Text
                   style={{ color: 'blue', textDecorationLine: 'underline' }}
                   onPress={() => Linking.openURL('mailto:infouy@southgenetics.com')}
@@ -431,32 +432,29 @@ const AKscoreScreen = () => {
               </Text>
               {"\n"}
           </Text>
+          )}
       </ScrollView>
       );
       break;
     case 2:
       tabContent = (
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {test && (
           <Text style={styles.tabContentText}>
-              4KScore mayor a 7,5%: indica biopsia prostática
+              {test.conducta}
           </Text>
-      </ScrollView>
+          )}
+        </ScrollView>
       );
       break;
     case 3:
       tabContent = (
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-              Muestra de sangre, sin preparación previa
-              {"\n\n"}
-              Resultados en 5-7 días
-              {"\n\n"}
-              Reporte gráfico en español y reporte clínico en inglés
-              {"\n\n"}
-              No se puede indicar si el paciente está en tratamiento con inhibidores de la alfa 5 reductasa, se requiere interrupción de 6 meses previo
-              {"\n\n"}
-              No puede haberse realizado un TR durante las 96 horas antes
-          </Text>
+        {test && (
+        <Text style={styles.tabContentText}>
+          {test.logistica}
+        </Text>
+        )}
       </ScrollView>
       );
       break;
@@ -469,485 +467,7 @@ const AKscoreScreen = () => {
   return (
     <View style={styles.containerTabs}>
       <Image
-          source={require('./assets/4kscore.png')}
-          style={[styles.imageForTest, { resizeMode: 'contain' }]} // Add resizeMode prop
-      />
-      <Text style={[styles.title, { color: '#0081a1' }]}>Marcadores diagnósticos previos a la primera biopsia prostática</Text>
-      <View style={styles.tabsContainer}>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 1 && styles.selectedTab]}
-          onPress={() => handleTabPress(1)}>
-          <Text style={styles.tabText}>INFORMACION</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 2 && styles.selectedTab]}
-          onPress={() => handleTabPress(2)}>
-          <Text style={styles.tabText}>CONDUCTA</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 3 && styles.selectedTab]}
-          onPress={() => handleTabPress(3)}>
-          <Text style={styles.tabText}>LOGÍSTICA</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.tabContent}>{tabContent}</View>
-    </View>
-  );
-}
-
-const SelectmdxScreen = () => {
-  const [selectedTab, setSelectedTab] = useState(1); // State to track the selected tab
-
-  const handleTabPress = (tabNumber) => {
-    setSelectedTab(tabNumber); // Update the selected tab state
-  };
-
-  let tabContent;
-  switch (selectedTab) {
-    case 1:
-      tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-          Estudio genético en orina, identifica la expresión de HOXC6 y DLX1.
-          Modelo multimodal que incorpora los genes como biomarcadores urinarios, suma edad,
-          PSA, densidad de PSA, historia familiar e historia de biopsias prostáticas,
-          logrando un VPN de 98% y evitando un 53% de biopsias innecesarias.
-          {"\n\n"}
-          El resultado se expresa como la probabilidad de CaP global y CaP alto riesgo (en%), no existiendo un punto de corte establecido.
-          {"\n\n"}
-          Ventajas:{"\n"}
-          1. Alto VPN para tumores clínicamente significativos{"\n"}
-          2 Método no invasivo{"\n"}
-          3. Evita repetición de biopsias innecesarias
-          {"\n\n"}
-          Desventajas:{"\n"}
-          1. Mayores costos{"\n"}
-          2. No existe un punto de corte establecido que facilite el accionar del urólogo
-          {"\n\n"}
-          Referencias:{"\n"}
-          1. Mayores costos{"\n"}
-          2. No existe un punto de corte establecido que facilite el accionar del urólogo
-          {"\n\n"}
-          Solicitar referencias a{" "}
-              <Text
-                  style={{ color: 'blue', textDecorationLine: 'underline' }}
-                  onPress={() => Linking.openURL('mailto:infouy@southgenetics.com')}
-              >
-                  infouy@southgenetics.com
-              </Text>            
-          {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    case 2:
-      tabContent = (
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-              Informa probabilidad (en %) de tumor alto y bajo riesgo
-              {"\n\n"}
-              Con estos datos decidir biopsia prostática
-              {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    case 3:
-      tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-              Muestra orina, después de masaje prostático por medio de TR
-              {"\n\n"}
-              Resultados en 7 días
-              {"\n\n"}
-              Reporte en inglés
-              {"\n\n"}
-              No se puede indicar si el paciente está en tratamiento con inhibidores de la alfa 5 reductasa,
-              se requiere interrupción de 6 meses previo
-              {"\n\n"}
-              PSA Total previo del paciente de no más de 6 meses antigüedad
-              {"\n\n"}
-              Si hay Biopsia previa, antigüedad mínima de 3 meses
-              {"\n\n"}
-              Se requiere aportar ultimo valor de PSA total, volumen prostático, antecendentes familiares de CaP, raza
-              {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    default:
-      tabContent = (
-      <Text style={styles.tabContentText}>No Content</Text>
-      );
-  }
-
-  return (
-    <View style={styles.containerTabs}>
-      <Image
-          source={require('./assets/selectmdx.png')}
-          style={[styles.imageForTest, { resizeMode: 'contain' }]} // Add resizeMode prop
-      />
-      <Text style={[styles.title, { color: '#0081a1' }]}>Marcadores diagnósticos previos a la primera biopsia prostática</Text>
-      <View style={styles.tabsContainer}>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 1 && styles.selectedTab]}
-          onPress={() => handleTabPress(1)}>
-          <Text style={styles.tabText}>INFORMACION</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 2 && styles.selectedTab]}
-          onPress={() => handleTabPress(2)}>
-          <Text style={styles.tabText}>CONDUCTA</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 3 && styles.selectedTab]}
-          onPress={() => handleTabPress(3)}>
-          <Text style={styles.tabText}>LOGÍSTICA</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.tabContent}>{tabContent}</View>
-    </View>
-  );
-}
-
-const ConfirmmdxScreen = () => {
-  const [selectedTab, setSelectedTab] = useState(1); // State to track the selected tab
-
-  const handleTabPress = (tabNumber) => {
-    setSelectedTab(tabNumber); // Update the selected tab state
-  };
-
-  let tabContent;
-  switch (selectedTab) {
-    case 1:
-      tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-          Busca en cada cilindro de la biopsia la metilación de los genes GSTP1, APC y RASSF1 asociados a la presencia de CaP.
-          {"\n\n"}
-          De encontrar metilación positiva en algún cilindro, se recomienda la re biopsia dirigida al sector del cilindro comprometido.
-          {"\n\n"}
-          Ventajas:{"\n"}
-          1. No invasivo (se analiza el tejido de la biopsia){"\n"}
-          2. Sensibilidad 68% y especificidad de 64%{"\n"}
-          3. VPN de 90% para CaP y 96% para CaP de Alto Grado{"\n"}
-          4.64% menos de biopsias{"\n"}
-          5. Guía la re biopsia a la zona donde se encontraron las alteraciones en la metilación
-          {"\n\n"}
-          Desventajas:{"\n"}
-          1. Aumenta los costos
-          {"\n\n"}
-          Referencias:{"\n"}
-          1. Aumenta los costos
-          {"\n\n"}
-          Solicitar referencias a{" "}
-              <Text
-                  style={{ color: 'blue', textDecorationLine: 'underline' }}
-                  onPress={() => Linking.openURL('mailto:infouy@southgenetics.com')}
-              >
-                  infouy@southgenetics.com
-              </Text>            
-          {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    case 2:
-      tabContent = (
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-              Metilación positiva en algún cilindro: indicar biopsia prostática dirigida
-              {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    case 3:
-      tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-              Muestra de tejido de la Biopsia que dio resultado negativo (ò HGPIN ò ASAP)
-              {"\n\n"}
-              Resultados en 20 días
-              {"\n\n"}
-              Reporte en inglés
-              {"\n\n"}
-              Antigüedad máxima de la biopsia: 24
-              meses
-              {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    default:
-      tabContent = (
-      <Text style={styles.tabContentText}>No Content</Text>
-      );
-  }
-
-  return (
-    <View style={styles.containerTabs}>
-      <Image
-          source={require('./assets/confirmmdx.png')}
-          style={[styles.imageForTest, { resizeMode: 'contain' }]} // Add resizeMode prop
-      />
-      <Text style={[styles.title, { color: '#0081a1' }]}>Marcadores diagnósticos previos a la primera biopsia prostática</Text>
-      <View style={styles.tabsContainer}>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 1 && styles.selectedTab]}
-          onPress={() => handleTabPress(1)}>
-          <Text style={styles.tabText}>INFORMACION</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 2 && styles.selectedTab]}
-          onPress={() => handleTabPress(2)}>
-          <Text style={styles.tabText}>CONDUCTA</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 3 && styles.selectedTab]}
-          onPress={() => handleTabPress(3)}>
-          <Text style={styles.tabText}>LOGÍSTICA</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.tabContent}>{tabContent}</View>
-    </View>
-  );
-}
-
-const OncotypeScreen = () => {
-  const [selectedTab, setSelectedTab] = useState(1); // State to track the selected tab
-
-  const handleTabPress = (tabNumber) => {
-    setSelectedTab(tabNumber); // Update the selected tab state
-  };
-
-  let tabContent;
-  switch (selectedTab) {
-    case 1:
-      tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-          Analisis genómico que evalúa en la biopsia la expresión de 17 genes
-          (12 asociados a diferentes vías de génesis tumoral y 5 genes de referencia).
-          {"\n\n"}
-          Se indica en pacientes con CaP de bajo o muy bajo riesgo en los que se quiere optar por una vigilancia activa
-          ya que es un predictor de tumores con Gleason igual o mayor a 7, tumores no confinados a la próstata,
-          recurrencia bioquímica y metástasis a distancia.
-          {"\n\n"}
-          GPS de bajo o muy bajo riesgo se pueden incluir en vigilancia activa.
-          {"\n\n"}
-          GPS de riesgo intermedio habrá que proponerles tratamientos radicales
-          {"\n\n"}
-          Ventajas:{"\n"}
-          1. No invasivo (se analiza el tejido de la biopsia){"\n"}
-          2. El GPS es un buen marcador pronóstico ya que predice patología adversa y{"\n"}
-          recurrencia
-          3. Respalda la decisión de Vigilancia Activa
-          {"\n\n"}
-          Desventajas:{"\n"}
-          1. Aumenta los costos{"\n"}
-          2. Limitaciones:{"\n"}
-          El tejido biopsico no puede haber recibido Radioterapia. El GPS fue validado en
-          paciente no tratados con inhibidores de la 5 alfa reductasa.
-          NO se conoce si existe o no efecto en el GPS del tratamiento con inhibidores de la 5 alfa reductasa,
-          por tanto se recomienda no realizar la prueba en estos pacientes.
-          {"\n\n"}
-          Solicitar referencias a{" "}
-              <Text
-                  style={{ color: 'blue', textDecorationLine: 'underline' }}
-                  onPress={() => Linking.openURL('mailto:infouy@southgenetics.com')}
-              >
-                  infouy@southgenetics.com
-              </Text>            
-          {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    case 2:
-      tabContent = (
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-          GPS de muy bajo riesgo o bajo riesgo: surgerir VA.
-          {"\n\n"}
-          GPS de riesgo bajo intermedio: sugerir PR o RT (en casos seleccionados puede considerarse terapia focal o vigilancia activa)
-          {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    case 3:
-      tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-          Muestra de tejido de la Biopsia, bloque de mayor compromiso tumoral
-          {"\n\n"}
-          Resultados en 14 días
-          {"\n\n"}
-          Reporte en inglés
-          {"\n\n"}
-          Antigüedad máxima de la biopsia: 3 años
-          {"\n\n"}
-          Se requiere reporte de Anatomía Patológica
-          {"\n\n"}
-          No se acepta tejido de RTU
-          {"\n\n"}
-          No se puede realizar sobre tejido que fue sometido a Radioterapia
-          {"\n\n"}
-          Criterios de Inclusion
-          {"\n\n"}
-          NCCN Muy bajo riesgo (debe presentar TODOS los siguientes criterios):{"\n"}
-          - Gleason Score ≤ 6{"\n"}
-          - PSA {"<"} 10 ng/mL{"\n"}
-          - Estadio clínico T1c{"\n"}
-          - Menos de 3 cilindros/filamentos
-          positivos, ≤ 50% compromiso tumoral en cualquier cilindro/filamento{"\n"}
-          - PSA densidad {"<"} 0.15 ng/mL/g
-          {"\n\n"}
-          NCCN Bajo riesgo (debe presentar TODOS
-          los siguientes criterios):{"\n"}
-          - Gleason Score ≤ 6{"\n"}
-          - PSA {"<"} 10 ng/mL{"\n"}
-          - Estadio Clínico T1c-T2a
-          {"\n\n"}
-          NCCN Riesgo intermedio (debe cumplir UNO de los siguientes criterios):{"\n"}
-          - Gleason Score ≤ 6, Y{"\n"}
-          * Estadio Clínico T2b-T2c, O{"\n"}
-          * PSA 10-20 ng/mL{"\n"}
-          - Gleason Score 3+4, Y todo lo siguiente:{"\n"}
-          * Estadio Clínico T1c-T2c{"\n"}
-          * PSA ≤ 20 ng/mL{"\n"}
-          - Gleason Score 4+3, Y todo los siguiente:{"\n"}
-          * Estadio Clínico T1c-T2c{"\n"}
-          * PSA ≤ 20 ng/mL
-          {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    default:
-      tabContent = (
-      <Text style={styles.tabContentText}>No Content</Text>
-      );
-  }
-
-  return (
-    <View style={styles.containerTabs}>
-      <Image
-          source={require('./assets/oncotype.png')}
-          style={[styles.imageForTest, { resizeMode: 'contain' }]} // Add resizeMode prop
-      />
-      <Text style={[styles.title, { color: '#0081a1' }]}>Marcadores diagnósticos previos a la primera biopsia prostática</Text>
-      <View style={styles.tabsContainer}>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 1 && styles.selectedTab]}
-          onPress={() => handleTabPress(1)}>
-          <Text style={styles.tabText}>INFORMACION</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 2 && styles.selectedTab]}
-          onPress={() => handleTabPress(2)}>
-          <Text style={styles.tabText}>CONDUCTA</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 3 && styles.selectedTab]}
-          onPress={() => handleTabPress(3)}>
-          <Text style={styles.tabText}>LOGÍSTICA</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.tabContent}>{tabContent}</View>
-    </View>
-  );
-}
-
-const DecipherScreen = () => {
-  const [selectedTab, setSelectedTab] = useState(1); // State to track the selected tab
-
-  const handleTabPress = (tabNumber) => {
-    setSelectedTab(tabNumber); // Update the selected tab state
-  };
-
-  let tabContent;
-  switch (selectedTab) {
-    case 1:
-      tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-          El Clasificador Genómico Decipher, evalua la expresión de 22 genes vinculados a diferentes vías biológicas del CaP.
-          Brinda información que permite establecer con mayor precisión el riesgo de un tumor localizado,
-          y por ende definir con más argumentos el o los tratamientos a realizar.
-          {"\n\n"}
-          Si el resultado es bajo riesgo genético se puede optar, dependiendo del riesgo clásico,
-          por una vigilancia activa o un tratamiento radical.
-          {"\n\n"}
-          Un resultado de alto riesgo genético sugiere un tratamiento multimodal.
-          {"\n\n"}
-          Ventajas:{"\n"}
-          1 No aumenta invasividad (se utiliza tejido){"\n"}
-          2. Nos permite establecer con mayor precisión el riesgo tumoral, y por ende, definir con mayor certeza el tratamiento
-          {"\n\n"}
-          Desventajas:{"\n"}
-          1. Aumenta los costos
-          {"\n\n"}
-          Referencias:{"\n"}
-          1. Aumenta los costos
-          {"\n\n"}
-          Solicitar referencias a{" "}
-              <Text
-                  style={{ color: 'blue', textDecorationLine: 'underline' }}
-                  onPress={() => Linking.openURL('mailto:infouy@southgenetics.com')}
-              >
-                  infouy@southgenetics.com
-              </Text>
-          {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    case 2:
-      tabContent = (
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-          Bajo riesgo y NCCN bajo: sugerir VA.
-          {"\n\n"}
-          Bajo riesgo y NCCN intermedio o alto: sugerir RT o PR.
-          {"\n\n"}
-          Alto riesgo y cualqueir NCCN: sugerir terapia intensificada o multimodal
-          {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    case 3:
-      tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.tabContentText}>
-          Muestra de tejido de la Prostatectomía Radical, bloque de mayor compromiso tumoral
-          {"\n\n"}
-          Resultados en 22 días
-          {"\n\n"}
-          Reporte en inglés
-          {"\n\n"}
-          Antigüedad máxima del tejido: 5 años
-          {"\n\n"}
-          Se requiere reporte de Anatomía Patológica
-          {"\n\n"}
-          No se puede realizar sobre tejido que fue sometido a Radioterapia
-          {"\n"}
-          </Text>
-      </ScrollView>
-      );
-      break;
-    default:
-      tabContent = (
-      <Text style={styles.tabContentText}>No Content</Text>
-      );
-  }
-
-  return (
-    <View style={styles.containerTabs}>
-      <Image
-          source={require('./assets/decipher.png')}
+          source={imageSource}
           style={[styles.imageForTest, { resizeMode: 'contain' }]} // Add resizeMode prop
       />
       <Text style={[styles.title, { color: '#0081a1' }]}>Marcadores diagnósticos previos a la primera biopsia prostática</Text>
@@ -974,7 +494,7 @@ const DecipherScreen = () => {
 }
 
 
-//search screens
+//Search Screens
 const SearchScreen = ({navigation}) => {
   const [isYes, setIsYes] = useState(false);
   const [biopsia, setBiopsia] = useState(false);
@@ -1149,7 +669,9 @@ return (
       { !protatect && !biopsia && (
       <TouchableOpacity
           style={styles.buttonListado}
-          onPress={() => navigation.navigate('4kscore')}>
+          onPress={() => navigation.navigate('tests', {
+            testName: '4KScore'
+          })}>
           <View style={styles.buttonListadoContent}>
           <Image
               source={require('./assets/4kscore.png')}
@@ -1162,7 +684,9 @@ return (
       { !protatect && !biopsia && (
       <TouchableOpacity
           style={styles.buttonListado}
-          onPress={() => navigation.navigate('selectmdx')}>
+          onPress={() => navigation.navigate('tests', {
+            testName: "SelectMDX"
+          })}>
           <View style={styles.buttonListadoContent}>
           <Image
               source={require('./assets/selectmdx.png')}
@@ -1175,7 +699,9 @@ return (
       { biopsia && resultado === 'Negativo' && (
       <TouchableOpacity
           style={styles.buttonListado}
-          onPress={() => navigation.navigate('confirmmdx')}>
+          onPress={() => navigation.navigate('tests', {
+            testName: "ConfirmMDX"
+          })}>
           <View style={styles.buttonListadoContent}>
           <Image
               source={require('./assets/confirmmdx.png')}
@@ -1188,7 +714,9 @@ return (
       { biopsia && resultado === 'Positivo' && riesgo === 'Bajo' && (
       <TouchableOpacity
           style={styles.buttonListado}
-          onPress={() => navigation.navigate('oncotype')}>
+          onPress={() => navigation.navigate('tests', {
+            testName: "Oncotype"
+          })}>
           <View style={styles.buttonListadoContent}>
           <Image
               source={require('./assets/oncotype.png')}
@@ -1201,7 +729,9 @@ return (
       { biopsia && resultado === 'Positivo' && riesgo === 'Bajo' && (
           <TouchableOpacity
               style={styles.buttonListado}
-              onPress={() => navigation.navigate('decipher')}>
+              onPress={() => navigation.navigate('tests', {
+                testName: "Decipher"
+              })}>
               <View style={styles.buttonListadoContent}>
               <Image
                   source={require('./assets/decipher.png')}
@@ -1214,7 +744,9 @@ return (
       { protatect && (
           <TouchableOpacity
               style={styles.buttonListado}
-              onPress={() => navigation.navigate('decipher')}>
+              onPress={() => navigation.navigate('tests', {
+                testName: "Decipher"
+              })}>
               <View style={styles.buttonListadoContent}>
               <Image
                   source={require('./assets/decipher.png')}
@@ -1306,6 +838,8 @@ const SphereModel = () => {
   )
 }
 
+
+//Styles sheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -1456,6 +990,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#d8d7d7fd',
     justifyContent: 'flex-start',
     borderRadius: 10,
+  },
+  scrollContainerFromul: {
+    backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+    padding: 15,
   },
   tabContentText: {
       fontSize: 17,
