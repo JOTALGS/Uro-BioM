@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, ScrollView, Linking, Switch, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, ScrollView, Linking, Switch, Image, Modal } from 'react-native';
 import React, { useRef, useState, useEffect } from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,6 +8,8 @@ import { TextureLoader } from 'three';
 import pngTexture from './assets/logo_texture.png';
 import { printToFileAsync, selectPrinterAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
+import DatePicker from 'react-native-modern-datepicker'
+
 
 
 const Stack = createNativeStackNavigator();
@@ -49,7 +51,12 @@ export default function App() {
         <Stack.Screen
           name="tests"
           component={TestScreen}
-          options={{ title: 'Test' }} // Set the title of the header
+          options={{ 
+            title: '', 
+            headerBackTitleVisible: false, 
+            headerShown: true ,
+            headerTintColor: '#0081a1'
+          }}// Set the title of the header
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -65,12 +72,11 @@ const HomeScreen = ({navigation}) => {
         <SphereModel />
       </Canvas>
       <Text style={styles.title}>BIOMARCADORES MOLECULARES EN CÁNCER DE PRÓSTATA</Text>
-      <Button
-        title="Iniciar"
-        onPress={() =>
-          navigation.navigate('Profile', {name: 'Jane'})
-        }
-      />
+      <TouchableOpacity
+        style={[styles.buttonIniciar, { marginTop: '5%' }]}
+        onPress={() => navigation.navigate('Profile')}>
+        <Text style={[styles.buttonText, { marginTop: '7%' }]}>Iniciar</Text>
+      </TouchableOpacity>
       <View style={styles.div2}>
         <Text style={styles.subTitle}>Dr. Levin Martinez</Text>
         <Text style={styles.content}>Prof. Titular Cátedra de Urología</Text>
@@ -118,7 +124,7 @@ const ProfileScreen = ({navigation}) => {
 const ListadoScreen = ({ navigation }) => {
   return (
     <View style={styles.containerListado}>
-      <Text style={styles.title}>OPCIONES</Text>
+      <Text style={styles.title}>Listado de biomarcadores</Text>
       <TouchableOpacity
         style={styles.buttonListado}
         onPress={() => navigation.navigate('tests', {
@@ -204,7 +210,8 @@ const FormularioScreen = () => {
   let [volumen, setVolumen] = useState("")
   let [unidad, setUnidad] = useState("")
   let [raza, setRaza] = useState("")
-
+  const [date, setDate] = useState()
+  const [open, setOpen] = useState(false)
 
   const html = `
     <html>
@@ -231,6 +238,10 @@ const FormularioScreen = () => {
     </html>
   `;
 
+  const handleChange = (fecha) => {
+    setFecha(fecha)
+    console.log(fecha)
+  }
 
   const GeneratePDF = async () =>{
     const file = await printToFileAsync({
@@ -246,7 +257,32 @@ const FormularioScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContainerFromul}>
       <View styles={styles.pdfContainer}>
         <Text>Dia y hora de extracción de muestra :</Text>
-        <TextInput style={styles.inputText} value={fecha} placeholder='fecha' onChangeText={(value) => setFecha(value)} />
+        <Button title="Open" onPress={() => setOpen(true)} />
+        <View style={styles.centeredView}>
+          <Modal
+            animationType='slide'
+            transparent={true}
+            visible={open}
+            style={{marginTop: '20%'}}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <DatePicker
+                  mode='calendar'
+                  selected={fecha}
+                  onDateChange={handleChange}
+                />
+                <TouchableOpacity
+                  style={styles.buttonClose}
+                  onPress={() => setOpen(false)}
+                >
+                  <Text style={styles.buttonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+          <Text>{fecha}</Text>
+        </View>
         <Text>Nombre del paciente:</Text>
         <TextInput style={styles.inputText} value={nombre} placeholder='nombre del paciente' onChangeText={(value) => setNombre(value)} />
         <Text>Fecha de nacimiento:</Text>
@@ -420,7 +456,7 @@ const TestScreen = ({navigation, route}) =>{
   switch (selectedTab) {
     case 1:
       tabContent = (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <>
           {test && (
           <Text style={styles.tabContentText}>
               {test.informacion}
@@ -433,7 +469,7 @@ const TestScreen = ({navigation, route}) =>{
               {"\n"}
           </Text>
           )}
-      </ScrollView>
+      </>
       );
       break;
     case 2:
@@ -465,31 +501,33 @@ const TestScreen = ({navigation, route}) =>{
   }
 
   return (
-    <View style={styles.containerTabs}>
-      <Image
-          source={imageSource}
-          style={[styles.imageForTest, { resizeMode: 'contain' }]} // Add resizeMode prop
-      />
-      <Text style={[styles.title, { color: '#0081a1' }]}>Marcadores diagnósticos previos a la primera biopsia prostática</Text>
-      <View style={styles.tabsContainer}>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 1 && styles.selectedTab]}
-          onPress={() => handleTabPress(1)}>
-          <Text style={styles.tabText}>INFORMACION</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 2 && styles.selectedTab]}
-          onPress={() => handleTabPress(2)}>
-          <Text style={styles.tabText}>CONDUCTA</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, selectedTab === 3 && styles.selectedTab]}
-          onPress={() => handleTabPress(3)}>
-          <Text style={styles.tabText}>LOGÍSTICA</Text>
-        </TouchableOpacity>
+    <ScrollView>
+      <View style={styles.containerTabs}>
+        <Image
+            source={imageSource}
+            style={[styles.imageForTest, { resizeMode: 'contain' }]} // Add resizeMode prop
+        />
+        <Text style={[styles.title, { color: '#0081a1' }]}>Marcadores diagnósticos previos a la primera biopsia prostática</Text>
+        <View style={styles.tabsContainer}>
+          <TouchableOpacity
+            style={[styles.tab, selectedTab === 1 && styles.selectedTab]}
+            onPress={() => handleTabPress(1)}>
+            <Text style={styles.tabText}>INFORMACION</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, selectedTab === 2 && styles.selectedTab]}
+            onPress={() => handleTabPress(2)}>
+            <Text style={styles.tabText}>CONDUCTA</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, selectedTab === 3 && styles.selectedTab]}
+            onPress={() => handleTabPress(3)}>
+            <Text style={styles.tabText}>LOGÍSTICA</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.tabContent}>{tabContent}</View>
       </View>
-      <View style={styles.tabContent}>{tabContent}</View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -854,13 +892,12 @@ const styles = StyleSheet.create({
   containerListado: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#0081a1"
   },
   button: {
     backgroundColor: "teal",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 55,
     marginTop: '4%',
     width: '100%',
     height: '25%',
@@ -869,7 +906,7 @@ const styles = StyleSheet.create({
   buttonInit: {
     backgroundColor: "teal",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 55,
     marginTop: '8%',
     width: '100%',
     height: '30%',
@@ -896,7 +933,8 @@ const styles = StyleSheet.create({
     color: '#ffff',
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: '3%',
+    marginTop:'10%',
+    marginBottom: '13%',
   },
   subTitle: {
     textAlign: 'center',
@@ -928,7 +966,7 @@ const styles = StyleSheet.create({
     width: '80%',
     padding: 10,
     marginVertical: 10,
-    borderRadius: 5,
+    borderRadius: 55,
     backgroundColor: 'white',
     elevation: 3, // Add shadow on Android
     shadowColor: 'black',
@@ -951,6 +989,14 @@ const styles = StyleSheet.create({
     width: '80%',
     height: '15%',
     alignSelf: 'center',
+  },
+  buttonIniciar: {
+    backgroundColor: '#ff42',
+    width: '50%',
+    height: '7%',
+    alignSelf: 'center',
+    borderRadius: 55,
+    marginBottom: 25,
   },
   buttonListadoText: {
     fontSize: 16,
@@ -982,9 +1028,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#cfcfcffd',
     margin: 10,
     padding: 20,
-    width: '90%',
     borderRadius: 10,
-    maxHeight: '60%',
+    marginBottom: '50%'
   },
   scrollContainer: {
     backgroundColor: '#d8d7d7fd',
@@ -1077,5 +1122,29 @@ const styles = StyleSheet.create({
     padding: 8,
     marginTop: 4,
     marginBottom: 8,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonClose: {
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 55,
+    backgroundColor: '#2196F3',
   },
 });
