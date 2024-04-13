@@ -1,5 +1,5 @@
 {
-  "name": "8-puta",
+  "name": "urobiom",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "@react-three/fiber": "^8.16.1",
-    "expo": "~50.0.14",
+    "expo": "~50.0.15",
     "expo-gl": "~13.6.0",
     "expo-print": "^12.8.1",
     "expo-sharing": "^11.10.0",
