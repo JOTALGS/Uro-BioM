@@ -48,7 +48,7 @@ export default function App() {
           name="listado"
           component={ListadoScreen}
           options={{ 
-            title: 'Atras', 
+            title: '', 
             headerBackTitleVisible: false, 
             headerShown: true ,
             headerTintColor: '#FFFFFF', // Text color of header elements
@@ -61,7 +61,7 @@ export default function App() {
           name="buscador"
           component={SearchScreen}
           options={{ 
-            title: 'Buscador', 
+            title: '', 
             headerBackTitleVisible: false, 
             headerShown: true ,
             headerTintColor: '#FFFFFF', // Text color of header elements
@@ -73,7 +73,15 @@ export default function App() {
         <Stack.Screen
           name="SearchResult"
           component={SearchresultScreen}
-          options={{ title: 'Biomarcadores' }} // Set the title of the header
+          options={{ 
+            title: '', 
+            headerBackTitleVisible: false, 
+            headerShown: true ,
+            headerTintColor: '#FFFFFF', // Text color of header elements
+            headerStyle: {
+              backgroundColor: '#0081a1', // Background color of the header
+            },
+          }}// Set the title of the header
         />
         <Stack.Screen
           name="formulario"
@@ -129,9 +137,9 @@ const HomeScreen = ({navigation}) => {
       <Canvas camera={{ position: [-2, 2.5, 5], fov: 20 }}>
         <SphereModel />
       </Canvas>
-      <Text style={styles.title}>BIOMARCADORES MOLECULARES EN CÁNCER DE PRÓSTATA</Text>
+      <Text style={[styles.title, {marginBottom: '5%',}]}>BIOMARCADORES MOLECULARES EN CÁNCER DE PRÓSTATA</Text>
       <TouchableOpacity
-        style={[styles.buttonIniciar, { marginTop: '5%' }]}
+        style={[styles.buttonIniciar, { marginTop: '1%' }]}
         onPress={() => navigation.navigate('Profile')}>
         <Text style={[styles.buttonText, { marginTop: '7%' }]}>Iniciar</Text>
       </TouchableOpacity>
@@ -153,49 +161,82 @@ const HomeScreen = ({navigation}) => {
 };
 
 const ProfileScreen = ({navigation}) => {
+  const [translateY] = useState(new Animated.Value(1000));// Initial offset from bottom (adjust as needed)
+
+  useEffect(() => {
+    Animated.timing(translateY, {
+      toValue: -60, // Animate to the center (adjust offset for precise centering)
+      duration: 600, // Animation duration (adjust as desired)
+      useNativeDriver: true, // Optimize performance (optional)
+    }).start();
+  }, []);
+
   return (
   <View style={styles.container}>
     <Canvas camera={{ position: [-2, 2.5, 5], fov: 30 }}>
       <DynamicSphereModel />
     </Canvas>
     <View style={styles.buttonsContainer}>
-      <TouchableOpacity
-        style={[styles.buttonInit, { marginTop: '8%' }]}
-        onPress={() => navigation.navigate('listado')}>
-        <Text style={[styles.buttonText, { marginTop: '4%' }]}>Biomarcadores disponibles</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.buttonInit]}
-        onPress={() => navigation.navigate('algor')}>
-        <Text style={[styles.buttonText, { marginTop: '4%' }]}>Pruebas para recomendar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.buttonInit, { marginBottom: '8%' }]}
-        onPress={() => navigation.navigate('formulario')}>
-        <Text style={[styles.buttonText, { marginTop: '4%' }]}>Generar formulario</Text>
-      </TouchableOpacity>
+      <Animated.View  style={{ transform: [{ translateY }] }}>
+        <TouchableOpacity
+          style={[styles.buttonInit, { marginTop: '8%' }]}
+          onPress={() => navigation.navigate('listado')}>
+          <Text style={[styles.buttonText, { marginTop: '8%' }]}>Biomarcadores disponibles</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.buttonInit]}
+          onPress={() => navigation.navigate('algor')}>
+          <Text style={[styles.buttonText, { marginTop: '8%' }]}>Que prueba recomendar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.buttonInit, { marginBottom: '8%' }]}
+          onPress={() => navigation.navigate('formulario')}>
+          <Text style={[styles.buttonText, { marginTop: '8%' }]}>Generar formulario</Text>
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   </View>
   );
 };
 
 const AlgoScreen = ({navigation}) => {
+  const [translateY1] = useState(new Animated.Value(-1000)); // Initial offset from top for first button (adjust as needed)
+  const [translateY2] = useState(new Animated.Value(1000)); // Initial offset from bottom for second button (adjust as needed)
+
+  useEffect(() => {
+    Animated.parallel([ // Use parallel animation for simultaneous movement
+      Animated.timing(translateY1, {
+        toValue: 100, // Animate to the center (adjust offset for precise centering)
+        duration: 600, // Animation duration (adjust as desired)
+        useNativeDriver: true, // Optimize performance (optional)
+      }),
+      Animated.timing(translateY2, {
+        toValue: 100, // Animate to the center (adjust offset for precise centering)
+        duration: 600, // Animation duration (adjust as desired)
+        useNativeDriver: true, // Optimize performance (optional)
+      }),
+    ]).start();
+  }, []);
+
+
   return (
   <View style={styles.container}>
-    <Canvas camera={{ position: [-2, 2.5, 5], fov: 30 }}>
-      <DynamicSphereModel />
-    </Canvas>
-    <View style={styles.buttonsContainer}>
-      <TouchableOpacity
-        style={[styles.buttonInit, { marginTop: '8%' }]}
-        onPress={() => navigation.navigate('buscador')}>
-        <Text style={[styles.buttonText, { marginTop: '4%' }]}>Diagnostico</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.buttonInit, { marginBottom: '8%' }]}
-        onPress={() => navigation.navigate('tratamiento')}>
-        <Text style={[styles.buttonText, { marginTop: '4%' }]}>Tratamiento</Text>
-      </TouchableOpacity>
+    <View style={[styles.buttonsContainer , {marginTop: '1%', justifyContent: 'space-around'}]}>
+    <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Usos en la práctica clpinica:</Text>
+      <Animated.View  style={{ transform: [{ translateY: translateY1 }] }}>
+        <TouchableOpacity
+          style={[styles.buttonInit, { height: '50%'}]}
+          onPress={() => navigation.navigate('buscador')}>
+          <Text style={[styles.buttonText, { marginTop: '4%' }]}>Diagnostico</Text>
+        </TouchableOpacity>
+      </Animated.View>
+      <Animated.View  style={{ transform: [{ translateY: translateY2 }] }}>
+        <TouchableOpacity
+          style={[styles.buttonInit, { height: '50%' }]}
+          onPress={() => navigation.navigate('tratamiento')}>
+          <Text style={[styles.buttonText, { marginTop: '4%' }]}>Pronóstico/Terapéutico</Text>
+        </TouchableOpacity>
+      </Animated.View >
     </View>
   </View>
   );
@@ -203,114 +244,129 @@ const AlgoScreen = ({navigation}) => {
 
 
 const TratamientoScreen = ({navigation}) => {
+  const [translateY1] = useState(new Animated.Value(-1000)); // Initial offset from top for first button (adjust as needed)
+  const [translateY2] = useState(new Animated.Value(1000)); // Initial offset from bottom for second button (adjust as needed)
+
+  useEffect(() => {
+    Animated.parallel([ // Use parallel animation for simultaneous movement
+      Animated.timing(translateY1, {
+        toValue: 100, // Animate to the center (adjust offset for precise centering)
+        duration: 600, // Animation duration (adjust as desired)
+        useNativeDriver: true, // Optimize performance (optional)
+      }),
+      Animated.timing(translateY2, {
+        toValue: 140, // Animate to the center (adjust offset for precise centering)
+        duration: 600, // Animation duration (adjust as desired)
+        useNativeDriver: true, // Optimize performance (optional)
+      }),
+    ]).start();
+  }, []);
+
   return (
   <View style={styles.container}>
-    <Canvas camera={{ position: [-2, 2.5, 5], fov: 30 }}>
-      <DynamicSphereModel />
-    </Canvas>
-    <View style={styles.buttonsContainer}>
-      <TouchableOpacity
+    <View style={[styles.buttonsContainer , {marginTop: '1%', justifyContent: 'space-around'}]}>
+    <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Tratamiento</Text>
+    <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Seleccione la situación clínica:</Text>
+      <Animated.View  style={{ transform: [{ translateY: translateY1 }] }}>
+        <TouchableOpacity
         style={[styles.buttonInit, { height: 'auto', marginTop: '2%' }]}
         onPress={() => navigation.navigate('SearchResult', { protatect: true, biopsia: false})}>
         <Text style={[styles.buttonText, { padding: '5%' }]}>Dispuesto a tratarlo con terapia ayduante posterior a la prostatectomia</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
+        </TouchableOpacity>
+      </Animated.View>
+      <Animated.View  style={{ transform: [{ translateY: translateY2 }] }}>
+        <TouchableOpacity
         style={[styles.buttonInit, { height: 'auto', marginBottom: '8%' }]}
         onPress={() => navigation.navigate('SearchResult', { protatect: false, biopsia: true, resultado: "Positivo"})}>
         <Text style={[styles.buttonText, { padding: '5%' }]}>Dispuesto a la prostatectomia</Text>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </Animated.View >
     </View>
   </View>
   );
 };
 
 const ListadoScreen = ({ navigation }) => {
-  const animateButton = (animationRef) => {
-    Animated.spring(animationRef, {
-      toValue: 1,
-      tension: 20,
-      useNativeDriver: true,
-    }).start();
-  };
-  const animationValue = useRef(new Animated.Value(0)).current;
+  const [translateY] = useState(new Animated.Value(1000));// Initial offset from bottom (adjust as needed)
 
-  const translateY = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [300, 0],
-  });
-  
-  const buttonStyle = {
-    transform: [{ translateY }],
-  };
+  useEffect(() => {
+    Animated.timing(translateY, {
+      toValue: 0, // Animate to the center (adjust offset for precise centering)
+      duration: 600, // Animation duration (adjust as desired)
+      useNativeDriver: true, // Optimize performance (optional)
+    }).start();
+  }, []);
 
   return (
     <View style={styles.containerListado}>
       <Text style={styles.title}>Listado de biomarcadores</Text>
-      <TouchableOpacity
-        style={[styles.buttonListado]}
-        onPress={() => navigation.navigate('tests', {
-          testName: "4KScore"
-        })}>
-        <View style={styles.buttonListadoContent}>
-          <Image
-            source={require('./assets/4kscore.png')}
-            style={[styles.image, { resizeMode: 'contain' }]} // Add resizeMode prop
-          />
-          <Text style={styles.buttonListadoText}>Calicreínas</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.buttonListado}
-        onPress={() => navigation.navigate('tests', {
-          testName: "SelectMDX"
-        })}>
-        <View style={styles.buttonListadoContent}>
-          <Image
-            source={require('./assets/selectmdx.png')}
-            style={[styles.image, { resizeMode: 'contain' }]}
-          />
-          <Text style={styles.buttonListadoText}>Panel genético basado en ARNm</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.buttonListado}
-        onPress={() => navigation.navigate('tests', {
-          testName: "ConfirmMDX"
-        })}>
-        <View style={styles.buttonListadoContent}>
-          <Image
-            source={require('./assets/confirmmdx.png')}
-            style={[styles.image, { resizeMode: 'contain' }]}
-          />
-          <Text style={styles.buttonListadoText}>Estudios Epigenéticos</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.buttonListado}
-        onPress={() => navigation.navigate('tests', {
-          testName: "Oncotype"
-        })}>
-        <View style={styles.buttonListadoContent}>
-          <Image
-            source={require('./assets/oncotype.png')}
-            style={[styles.image, { resizeMode: 'contain' }]}
-          />
-          <Text style={styles.buttonListadoText}>Genomic Prostate Score (GPS)</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.buttonListado}
-        onPress={() => navigation.navigate('tests', {
-          testName: "Decipher"
-        })}>
-        <View style={styles.buttonListadoContent}>
-          <Image
-            source={require('./assets/decipher.png')}
-            style={[styles.image, { resizeMode: 'contain' }]}
-          />
-          <Text style={styles.buttonListadoText}>Genomic Classifier (GC)</Text>
-        </View>
-      </TouchableOpacity>
+      <Animated.View  style={{ transform: [{ translateY }] }}>
+        <TouchableOpacity
+          style={[styles.buttonListado]}
+          onPress={() => navigation.navigate('tests', {
+            testName: "4KScore"
+          })}>
+          <View style={styles.buttonListadoContent}>
+            <Image
+              source={require('./assets/4kscore.png')}
+              style={[styles.image, { resizeMode: 'contain' }]} // Add resizeMode prop
+            />
+            <Text style={styles.buttonListadoText}>Calicreínas</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonListado}
+          onPress={() => navigation.navigate('tests', {
+            testName: "SelectMDX"
+          })}>
+          <View style={styles.buttonListadoContent}>
+            <Image
+              source={require('./assets/selectmdx.png')}
+              style={[styles.image, { resizeMode: 'contain' }]}
+            />
+            <Text style={styles.buttonListadoText}>Panel genético basado en ARNm</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonListado}
+          onPress={() => navigation.navigate('tests', {
+            testName: "ConfirmMDX"
+          })}>
+          <View style={styles.buttonListadoContent}>
+            <Image
+              source={require('./assets/confirmmdx.png')}
+              style={[styles.image, { resizeMode: 'contain' }]}
+            />
+            <Text style={styles.buttonListadoText}>Estudios Epigenéticos</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonListado}
+          onPress={() => navigation.navigate('tests', {
+            testName: "Oncotype"
+          })}>
+          <View style={styles.buttonListadoContent}>
+            <Image
+              source={require('./assets/oncotype.png')}
+              style={[styles.image, { resizeMode: 'contain' }]}
+            />
+            <Text style={styles.buttonListadoText}>Genomic Prostate Score (GPS)</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonListado}
+          onPress={() => navigation.navigate('tests', {
+            testName: "Decipher"
+          })}>
+          <View style={styles.buttonListadoContent}>
+            <Image
+              source={require('./assets/decipher.png')}
+              style={[styles.image, { resizeMode: 'contain' }]}
+            />
+            <Text style={styles.buttonListadoText}>Genomic Classifier (GC)</Text>
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 }
@@ -949,7 +1005,7 @@ const SearchScreen = ({navigation}) => {
         {biopsia===false && (
           <View style={styles.divSearch2}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>En caso que el paciente presente un PSA alto:</Text>
+              <Text style={styles.label}>En este caso el paciente debería presentar un PSA alto:</Text>
               <View style={[styles.pickerSearch, {flexDirection: 'row'}]}>
 
               </View>
@@ -1157,6 +1213,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'top',
     marginTop: '5%',
+    marginBottom: '5%'
   },
   containerListado: {
     flex: 1,
@@ -1164,7 +1221,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0081a1"
   },
   button: {
-    backgroundColor: "teal",
+    backgroundColor: "#ff42",
     padding: 10,
     borderRadius: 55,
     borderWidth: 2,
@@ -1175,7 +1232,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonInit: {
-    backgroundColor: "teal",
+    backgroundColor: "#ff42",
     padding: 10,
     borderRadius: 55,
     borderWidth: 2,
@@ -1193,12 +1250,12 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: 'column',
-    justifyContent: 'center',
     height: '38%',
     borderRadius: 55,
     margin: '10%',
     padding: '8%',
-    marginBottom: '25%'
+    matginTop: '30%',
+    justifyContent: 'center'
   },
   title: {
     textAlign: 'center',
@@ -1367,7 +1424,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: 'gray',
-    borderRadius: 5,
+    borderRadius: 55,
     backgroundColor: 'white',
     width: '80%',
     alignSelf: 'center',
@@ -1380,6 +1437,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginVertical: 5,
     flexDirection: 'column',
+    borderRadius: 55,
   },
   label: {
     alignSelf: 'center',
@@ -1396,7 +1454,7 @@ const styles = StyleSheet.create({
   pickerSearch: {
     flexDirection: 'row',
     justifyContent: 'center',
-    borderRadius: 5,
+    borderRadius: 55,
     borderColor: 'grey',
   },
   selectedButton: {
