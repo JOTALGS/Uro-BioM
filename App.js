@@ -346,21 +346,21 @@ const FormularioScreen = () => {
         <img src='./assets/selectmdx.png' />
         <h3 style="text-align: center; margin-bottom: 2%;">Dia y hora de la extracción de la muestra: ${fecha}</h3>
         <h2 style="margin-bottom: 1.5%;">Informacion del Paciente:</h2>
-        <p style="color: #313131; padding: 10;">Nombre del paciente: ${nombre}</p>
-        <p style="color: #313131; padding: 10;">Fecha de Nacimiento: ${born}</p>
-        <p style="color: #313131; padding: 10;">C.I.: ${cedula}</p>
-        <p style="color: #313131; padding: 10;">Médico Urólogo: ${medico}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Nombre del paciente: ${nombre}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Fecha de Nacimiento: ${born}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">C.I.: ${cedula}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Médico Urólogo: ${medico}</p>
 
         <h2 style="margin-bottom: 1.5%; margin-top: 2%;">Informacion del Clínica:</h2>
-        <p style="color: #313131; padding: 10;">Ha habido biopsias previas: ${biopsia}  Cuantas? ${num_biop}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15:;">Ha habido biopsias previas: ${biopsia}  Cuantas? ${num_biop}</p>
         <p style=" padding: 10;">Resultados:</p>
-        <p style="color: #313131; padding: 10;">${resultados}</p>
-        <p style="color: #313131; padding: 10;">Fecha del último tacto rectal: ${fech_tact}</p>
-        <p style="color: #313131; padding: 10;">Resultado: ${result_tact}</p>
-        <p style="color: #313131; padding: 10;">Fecha del último PSA: ${fech_psa} Valor del último PSA: ${val_psa}</p>
-        <p style="color: #313131; padding: 10;">Volumen de la próstata: ${volumen} ${unidad}</p>
-        <p style="color: #313131; padding: 10;">Raza: ${raza}</p>
-        <p style="color: #313131; padding: 10;">Firma del medico de la extracción: ________________________</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">${resultados}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Fecha del último tacto rectal: ${fech_tact}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Resultado: ${result_tact}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Fecha del último PSA: ${fech_psa} Valor del último PSA: ${val_psa}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Volumen de la próstata: ${volumen} ${unidad}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Raza: ${raza}</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Firma del medico de la extracción: ________________________</p>
         <p style="text-align: center; position: fixed; bottom: 0; width: 100%;">Av. Italia 2364 of. 304, Tel: 598 2487 89 95 / Email: infouy@southgenetics.com</p>
       </body>
     </html>
