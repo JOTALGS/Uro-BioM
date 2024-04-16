@@ -13,6 +13,7 @@ import DatePicker from 'react-native-modern-datepicker'
 
 
 const Stack = createNativeStackNavigator();
+const backColor = '#0081a1'
 
 export default function App() {
   return (
@@ -23,25 +24,16 @@ export default function App() {
           component={HomeScreen}
           options={{ 
             title: 'Uro-BioM', 
-            headerBackTitleVisible: false, 
-            headerShown: true ,
-            headerTintColor: '#FFFFFF', // Text color of header elements
-            headerStyle: {
-              backgroundColor: '#0081a1', // Background color of the header
-            },
+            headerShown: false ,
           }}
         />
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
           options={{ 
-            title: 'Inicio', 
-            headerBackTitleVisible: false, 
-            headerShown: true ,
-            headerTintColor: '#FFFFFF', // Text color of header elements
-            headerStyle: {
-              backgroundColor: '#0081a1', // Background color of the header
-            },
+            title: '', 
+            headerShown: false ,
+            headerTintColor: 'red',
           }}
         />
         <Stack.Screen
@@ -49,12 +41,7 @@ export default function App() {
           component={ListadoScreen}
           options={{ 
             title: '', 
-            headerBackTitleVisible: false, 
-            headerShown: true ,
-            headerTintColor: '#FFFFFF', // Text color of header elements
-            headerStyle: {
-              backgroundColor: '#0081a1', // Background color of the header
-            },
+            headerShown: false ,
           }}/// Set the title of the header
         />
         <Stack.Screen
@@ -62,12 +49,7 @@ export default function App() {
           component={SearchScreen}
           options={{ 
             title: '', 
-            headerBackTitleVisible: false, 
-            headerShown: true ,
-            headerTintColor: '#FFFFFF', // Text color of header elements
-            headerStyle: {
-              backgroundColor: '#0081a1', // Background color of the header
-            },
+            headerShown: false ,
           }}// Set the title of the header
         />
         <Stack.Screen
@@ -75,12 +57,7 @@ export default function App() {
           component={SearchresultScreen}
           options={{ 
             title: '', 
-            headerBackTitleVisible: false, 
-            headerShown: true ,
-            headerTintColor: '#FFFFFF', // Text color of header elements
-            headerStyle: {
-              backgroundColor: '#0081a1', // Background color of the header
-            },
+            headerShown: false ,
           }}// Set the title of the header
         />
         <Stack.Screen
@@ -93,9 +70,7 @@ export default function App() {
           component={TestScreen}
           options={{ 
             title: '', 
-            headerBackTitleVisible: false, 
-            headerShown: true ,
-            headerTintColor: '#0081a1'
+            headerShown: false ,
           }}// Set the title of the header
         />
         <Stack.Screen
@@ -103,12 +78,7 @@ export default function App() {
           component={AlgoScreen}
           options={{ 
             title: '', 
-            headerBackTitleVisible: false, 
-            headerShown: true ,
-            headerTintColor: '#FFFFFF', // Text color of header elements
-            headerStyle: {
-              backgroundColor: '#0081a1', // Background color of the header
-            },
+            headerShown: false ,
           }}// Set the title of the header
         />
         <Stack.Screen
@@ -116,12 +86,7 @@ export default function App() {
           component={TratamientoScreen}
           options={{ 
             title: '', 
-            headerBackTitleVisible: false, 
-            headerShown: true ,
-            headerTintColor: '#FFFFFF', // Text color of header elements
-            headerStyle: {
-              backgroundColor: '#0081a1', // Background color of the header
-            },
+            headerShown: false ,
           }}// Set the title of the header
         />
       </Stack.Navigator>
@@ -134,9 +99,12 @@ export default function App() {
 const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Canvas camera={{ position: [-2, 2.5, 5], fov: 20 }}>
-        <SphereModel />
-      </Canvas>
+      <Text style={styles.headerText}>Uro-BioM</Text>
+      <View style={styles.canvasContainer}>  
+        <Canvas camera={{ position: [-2, 2.5, 5], fov: 20 }}>
+          <SphereModel />
+        </Canvas>
+      </View>
       <Text style={[styles.title, {marginBottom: '5%',}]}>BIOMARCADORES MOLECULARES EN CÁNCER DE PRÓSTATA</Text>
       <TouchableOpacity
         style={[styles.buttonIniciar, { marginTop: '1%' }]}
@@ -148,8 +116,6 @@ const HomeScreen = ({navigation}) => {
         <Text style={styles.content}>Prof. Titular Cátedra de Urología</Text>
         <Text style={styles.subTitle}>Dr. Fermin Domenech</Text>
         <Text style={styles.content}>Asistente Titular Cátedra de Urología</Text>
-      </View>
-      <View style={styles.div3}>
           <Text style={styles.subTitle}>Hospital de Clínicas</Text>
           <Text style={[styles.subTitle, { marginTop: '0%' }]}>Dr. Manuel Quintana</Text>
           <Text style={styles.content}>Cátedra de Urología Prof. Dr. Levin Martinez</Text>
@@ -173,9 +139,12 @@ const ProfileScreen = ({navigation}) => {
 
   return (
   <View style={styles.container}>
-    <Canvas camera={{ position: [-2, 2.5, 5], fov: 30 }}>
+    <Canvas style={styles.canvas} camera={{ position: [-2, 2.5, 5], fov: 30 }}>
       <DynamicSphereModel />
     </Canvas>
+    <View style={styles.backView}>
+
+    </View>
     <View style={styles.buttonsContainer}>
       <Animated.View  style={{ transform: [{ translateY }] }}>
         <TouchableOpacity
@@ -191,7 +160,7 @@ const ProfileScreen = ({navigation}) => {
         <TouchableOpacity
           style={[styles.buttonInit, { marginBottom: '8%' }]}
           onPress={() => navigation.navigate('formulario')}>
-          <Text style={[styles.buttonText, { marginTop: '8%' }]}>Generar formulario</Text>
+          <Text style={[styles.buttonText, { marginTop: '8%' }]}>Generar formulario SelectMDX</Text>
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -200,19 +169,19 @@ const ProfileScreen = ({navigation}) => {
 };
 
 const AlgoScreen = ({navigation}) => {
-  const [translateY1] = useState(new Animated.Value(-1000)); // Initial offset from top for first button (adjust as needed)
+  const [translateY1] = useState(new Animated.Value(1000)); // Initial offset from top for first button (adjust as needed)
   const [translateY2] = useState(new Animated.Value(1000)); // Initial offset from bottom for second button (adjust as needed)
 
   useEffect(() => {
     Animated.parallel([ // Use parallel animation for simultaneous movement
       Animated.timing(translateY1, {
         toValue: 100, // Animate to the center (adjust offset for precise centering)
-        duration: 600, // Animation duration (adjust as desired)
+        duration: 300, // Animation duration (adjust as desired)
         useNativeDriver: true, // Optimize performance (optional)
       }),
       Animated.timing(translateY2, {
         toValue: 100, // Animate to the center (adjust offset for precise centering)
-        duration: 600, // Animation duration (adjust as desired)
+        duration: 300, // Animation duration (adjust as desired)
         useNativeDriver: true, // Optimize performance (optional)
       }),
     ]).start();
@@ -222,12 +191,12 @@ const AlgoScreen = ({navigation}) => {
   return (
   <View style={styles.container}>
     <View style={[styles.buttonsContainer , {marginTop: '1%', justifyContent: 'space-around'}]}>
-    <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Usos en la práctica clpinica:</Text>
+    <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Usos en la práctica clínica:</Text>
       <Animated.View  style={{ transform: [{ translateY: translateY1 }] }}>
         <TouchableOpacity
           style={[styles.buttonInit, { height: '50%'}]}
           onPress={() => navigation.navigate('buscador')}>
-          <Text style={[styles.buttonText, { marginTop: '4%' }]}>Diagnostico</Text>
+          <Text style={[styles.buttonText, { marginTop: '4%' }]}>Diagnóstico</Text>
         </TouchableOpacity>
       </Animated.View>
       <Animated.View  style={{ transform: [{ translateY: translateY2 }] }}>
@@ -244,7 +213,7 @@ const AlgoScreen = ({navigation}) => {
 
 
 const TratamientoScreen = ({navigation}) => {
-  const [translateY1] = useState(new Animated.Value(-1000)); // Initial offset from top for first button (adjust as needed)
+  const [translateY1] = useState(new Animated.Value(1000)); // Initial offset from top for first button (adjust as needed)
   const [translateY2] = useState(new Animated.Value(1000)); // Initial offset from bottom for second button (adjust as needed)
 
   useEffect(() => {
@@ -266,7 +235,7 @@ const TratamientoScreen = ({navigation}) => {
   <View style={styles.container}>
     <View style={[styles.buttonsContainer , {marginTop: '1%', justifyContent: 'space-around'}]}>
     <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Tratamiento</Text>
-    <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Seleccione la situación clínica:</Text>
+    <Text style={[{ marginBottom: '1%', marginTop: '20%', alignSelf: 'center', fontSize: 17, color: '#797979d0' }]}>Seleccione la situación clínica:</Text>
       <Animated.View  style={{ transform: [{ translateY: translateY1 }] }}>
         <TouchableOpacity
         style={[styles.buttonInit, { height: 'auto', marginTop: '2%' }]}
@@ -299,7 +268,7 @@ const ListadoScreen = ({ navigation }) => {
 
   return (
     <View style={styles.containerListado}>
-      <Text style={styles.title}>Listado de biomarcadores</Text>
+      <Text style={[styles.title, {color: '#fff'}]}>Listado de biomarcadores</Text>
       <Animated.View  style={{ transform: [{ translateY }] }}>
         <TouchableOpacity
           style={[styles.buttonListado]}
@@ -407,7 +376,7 @@ const FormularioScreen = () => {
         <p style="color: #313131; padding: 10; margin-left: 15;">C.I.: ${cedula}</p>
         <p style="color: #313131; padding: 10; margin-left: 15;">Médico Urólogo: ${medico}</p>
 
-        <h2 style="margin-bottom: 1.5%; margin-top: 2%;">Informacion del Clínica:</h2>
+        <h2 style="margin-bottom: 1.5%; margin-top: 2%;">Informacion Clínica:</h2>
         <p style="color: #313131; padding: 10; margin-left: 15:;">Ha habido biopsias previas: ${biopsia}  Cuantas? ${num_biop}</p>
         <p style=" padding: 10;">Resultados:</p>
         <p style="color: #313131; padding: 10; margin-left: 15;">${resultados}</p>
@@ -416,7 +385,7 @@ const FormularioScreen = () => {
         <p style="color: #313131; padding: 10; margin-left: 15;">Fecha del último PSA: ${fech_psa} Valor del último PSA: ${val_psa}</p>
         <p style="color: #313131; padding: 10; margin-left: 15;">Volumen de la próstata: ${volumen} ${unidad}</p>
         <p style="color: #313131; padding: 10; margin-left: 15;">Raza: ${raza}</p>
-        <p style="color: #313131; padding: 10; margin-left: 15;">Firma del medico de la extracción: ________________________</p>
+        <p style="color: #313131; padding: 10; margin-left: 15;">Firma del médico de la extracción: ________________________</p>
         <p style="text-align: center; position: fixed; bottom: 0; width: 100%;">Av. Italia 2364 of. 304, Tel: 598 2487 89 95 / Email: infouy@southgenetics.com</p>
       </body>
     </html>
@@ -442,7 +411,12 @@ const FormularioScreen = () => {
   return(
     <View>
       <ScrollView contentContainerStyle={styles.scrollContainerFromul}>
+        <Image
+            source={require('./assets/selectmdx.png')}
+            style={[styles.image, { resizeMode: 'contain', width:200, height:150, alignSelf: 'center', }]}
+        />  
       <View styles={styles.pdfContainer}>
+        <View style={styles.horizontalLine}/>
         <Text style={styles.formText}>Dia y hora de extracción de muestra :</Text>
         <View style={styles.rowContainer}>
           <TouchableOpacity
@@ -450,10 +424,10 @@ const FormularioScreen = () => {
             onPress={() => setOpen(true)}
           >
             {fecha && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>{fecha}</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '4%'}]}>{fecha}</Text>
             )}
             {!fecha && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>Fecha</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '4%'}]}>Fecha</Text>
             )}
           </TouchableOpacity>
           <TouchableOpacity
@@ -461,10 +435,10 @@ const FormularioScreen = () => {
             onPress={() => setOpenHora(true)}
           >
             {hora && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>{hora}</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '4%'}]}>{hora}</Text>
             )}
             {!hora && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>Hora</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '4%'}]}>Hora</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -513,7 +487,7 @@ const FormularioScreen = () => {
           <View style={styles.horizontalLine}/>
         
         <Text style={styles.formText}>Nombre del paciente:</Text>
-        <TextInput style={styles.inputText} value={nombre} placeholder='nombre del paciente' onChangeText={(value) => setNombre(value)} />
+        <TextInput style={styles.inputText} value={nombre} placeholder='Nombre del paciente' onChangeText={(value) => setNombre(value)} />
         <View style={styles.horizontalLine}/>
         
         <Text style={styles.formText}> Fecha de nacimiento:</Text>
@@ -523,10 +497,10 @@ const FormularioScreen = () => {
             onPress={() => setOpenBorn(true)}
           >
             {born && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>{born}</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '3%'}]}>{born}</Text>
             )}
             {!born && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>Fecha de nacimiento</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '3%'}]}>Fecha de nacimiento</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -559,11 +533,11 @@ const FormularioScreen = () => {
         <View style={styles.horizontalLine}/>
 
         <Text style={styles.formText}>Documento de identidad:</Text>
-        <TextInput style={styles.inputText} value={cedula} placeholder='C.I sin puntos ni guion' keyboardType="numeric" onChangeText={(value) => setCedula(value)} />
+        <TextInput style={styles.inputText} value={cedula} placeholder='C.I sin puntos ni guiones' keyboardType="numeric" onChangeText={(value) => setCedula(value)} />
         <View style={styles.horizontalLine}/>
         
         <Text style={styles.formText}>Médico Urólogo:</Text>
-        <TextInput style={styles.inputText} value={medico} placeholder='medico urólogo' onChangeText={(value) => setMedico(value)} />
+        <TextInput style={styles.inputText} value={medico} placeholder='Médico Urólogo' onChangeText={(value) => setMedico(value)} />
         <View style={styles.horizontalLine}/>
 
         <Text style={styles.formText}>Biopsias previas:</Text>
@@ -582,7 +556,7 @@ const FormularioScreen = () => {
           </TouchableOpacity>
         </View>
         { biopsia==='Si' &&(
-        <TextInput style={styles.inputText} value={num_biop} placeholder='cantidad de biopsias' keyboardType="numeric" onChangeText={(value) => setNumBiop(value)} />
+        <TextInput style={styles.inputText} value={num_biop} placeholder='Cantidad de biopsias' keyboardType="numeric" onChangeText={(value) => setNumBiop(value)} />
         )}
         <View style={styles.horizontalLine}/>
 
@@ -632,10 +606,10 @@ const FormularioScreen = () => {
             onPress={() => setOpenTact(true)}
           >
             {fech_tact && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>{fech_tact}</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '3%'}]}>{fech_tact}</Text>
             )}
             {!fech_tact && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>Fecha tacto rectal:</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '3%'}]}>Fecha del último tacto rectal</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -689,10 +663,10 @@ const FormularioScreen = () => {
             onPress={() => setOpenPsa(true)}
           >
             {fech_psa && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>{fech_psa}</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '3%'}]}>{fech_psa}</Text>
             )}
             {!fech_psa && (
-              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start',}]}>Fecha del PSA</Text>
+              <Text style={[{color: '#b6b5b5', alignSelf: 'flex-start', marginTop: '3%'}]}>Fecha del último PSA</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -722,11 +696,11 @@ const FormularioScreen = () => {
               </Modal>
             </View>
           </View>
-        <TextInput style={styles.inputText} value={val_psa} placeholder='Valor del PSA' keyboardType="numeric" onChangeText={(value) => setValPsa(value)} />
+        <TextInput style={styles.inputText} value={val_psa} placeholder='Valor del último PSA' keyboardType="numeric" onChangeText={(value) => setValPsa(value)} />
         <View style={styles.horizontalLine}/>
 
-        <Text style={styles.formText}>Volumen de la próstata:</Text>
-        <TextInput style={styles.inputText} value={volumen} placeholder='volumen' keyboardType="numeric" onChangeText={(value) => setVolumen(value)} />
+        <Text style={styles.formText}>Volúmen de la próstata:</Text>
+        <TextInput style={styles.inputText} value={volumen} placeholder='Volúmen' keyboardType="numeric" onChangeText={(value) => setVolumen(value)} />
         
         <Text style={styles.formText}>Unidad:</Text>
         <View style={[styles.picker, {flexDirection: 'row',}]}>
@@ -778,7 +752,13 @@ const FormularioScreen = () => {
           </View>
         </View>
       </View>
-      <Button title='Generar PDF' onPress={GeneratePDF} />
+      <View style={{marginBottom: '30%',}}>
+        <TouchableOpacity
+          style={[styles.buttonIniciar, { height: '17%', marginTop: '1%' }]}
+          onPress={GeneratePDF}>
+          <Text style={[styles.buttonText, { marginTop: '7%' }]}>Generar PDF</Text>
+        </TouchableOpacity>
+      </View>
       </ScrollView>
     </View>
   );
@@ -915,13 +895,13 @@ const TestScreen = ({navigation, route}) =>{
           <View style={[styles.tabContent, {backgroundColor: "#e077779d"}]}>{tabContent}</View>
         )}
         {test.testName === 'SelectMDX' && (
-          <View style={[styles.tabContent, {backgroundColor: "#f3ab588c"}]}>{tabContent}</View>
+          <View style={[styles.tabContent, {backgroundColor: "#8798a0d0"}]}>{tabContent}</View>
         )}    
         { test.testName === 'ConfirmMDX' && (
-          <View style={[styles.tabContent, {backgroundColor: "#f3ab588c"}]}>{tabContent}</View>
+          <View style={[styles.tabContent, {backgroundColor: "#84b5c4d0"}]}>{tabContent}</View>
         )}
         { test.testName === 'Oncotype' && (
-          <View style={[styles.tabContent, {backgroundColor: "#f39e588c"}]}>{tabContent}</View>
+          <View style={[styles.tabContent, {backgroundColor: "#d6eca1d0"}]}>{tabContent}</View>
         )}
         { test.testName === 'Decipher' && (
           <View style={[styles.tabContent, {backgroundColor: "#7d87db8c"}]}>{tabContent}</View>
@@ -1203,10 +1183,55 @@ const SphereModel = () => {
 
 
 //Styles sheet
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0081a1',
+    marginTop: '10%',
+    backgroundColor: '#eaeaea',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  headerText: {
+    fontSize: 30,
+    padding: 10,
+    alignSelf: 'center',
+    color: backColor,
+    fontWeight: 'bold',
+  },
+  canvasContainer: {
+    marginTop: 10,
+    height: '30%',
+    borderRadius: 180,
+    padding: 15,
+    width: '65%',
+    marginHorizontal: '17.5%',
+    backgroundColor: backColor,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  canvas: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 350,
+  },
+  backView: {
+    height: '50%'
   },
   containerTabs: {
     flex: 1,
@@ -1218,25 +1243,37 @@ const styles = StyleSheet.create({
   containerListado: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#0081a1"
+    backgroundColor: backColor
   },
   button: {
-    backgroundColor: "#ff42",
+    backgroundColor: backColor,
     padding: 10,
     borderRadius: 55,
-    borderWidth: 2,
-    borderColor: '#136100',
     marginTop: '10%',
     width: '100%',
     height: '25%',
     alignSelf: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // This is for Android shadow
   },
   buttonInit: {
-    backgroundColor: "#ff42",
+    backgroundColor: backColor,
     padding: 10,
     borderRadius: 55,
-    borderWidth: 2,
-    borderColor: '#136100',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, 
     marginTop: '8%',
     width: '100%',
     height: '30%',
@@ -1259,7 +1296,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    color: '#ffff',
+    color: backColor,
     fontSize: 20,
     fontWeight: "bold",
     marginTop:'10%',
@@ -1279,20 +1316,21 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   div2: {
-    backgroundColor: "#0081a1",
+    backgroundColor: backColor,
     alignItems: 'flex-end',
     width: '100%',
     marginRight: '15%',
     padding: 5,
     paddingEnd: 20,
-  },
-  div3: {
-    backgroundColor: "#0081a1",
-    alignItems: 'flex-end',
-    width: '100%',
-    paddingEnd: 20,
-    marginBottom: '5%',
-    padding: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+    elevation: 5,
+    paddingBottom: 40,
   },
   buttonListado: {
     width: '80%',
@@ -1317,6 +1355,8 @@ const styles = StyleSheet.create({
     width: 80,
     height: 60,
     marginRight: 10,
+    marginLeft: 10,
+    minWidth: 90,
   },
   imageForTest: {
     width: '80%',
@@ -1325,13 +1365,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonIniciar: {
-    backgroundColor: '#ff42',
+    backgroundColor: backColor,
     width: '50%',
     height: '7%',
     alignSelf: 'center',
     borderRadius: 55,
-    borderWidth: 2,
-    borderColor: '#136100',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+    elevation: 5,
     marginBottom: 25,
   },
   buttonListadoText: {
@@ -1369,7 +1415,7 @@ const styles = StyleSheet.create({
   tabText: {
       fontSize: 13,
       fontWeight: 'bold',
-      color: '#0081a1',
+      color: backColor,
       textAlign: 'auto',
   },
   tabContent: {
@@ -1388,6 +1434,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'flex-start',
     padding: 15,
+    paddingBottom: 50,
+    marginBottom: 60,
   },
   tabContentText: {
       fontSize: 17,
@@ -1395,7 +1443,7 @@ const styles = StyleSheet.create({
       color: '#5c5c5cfd',
   },
   dataContainer: {
-    backgroundColor: "#0081a1",
+    backgroundColor: backColor,
     fontSize: 16,
     textAlign: 'center',
     borderRadius: 10,
@@ -1472,13 +1520,23 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: '90%',
+    height: '3.3%',
     alignSelf: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
+    borderRadius: 55,
     padding: 8,
     marginTop: 15,
     marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginBottom: 25,
   },
   centeredView: {
     flex: 1,
@@ -1515,7 +1573,8 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginTop:15,
     padding: 10,
-    borderRadius: 5,
+    height: '85%',
+    borderRadius: 55,
     borderWidth: 1,
     borderColor: '#ccc',
     minWidth: '40%',
