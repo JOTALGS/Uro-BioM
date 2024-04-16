@@ -8,7 +8,8 @@ import { TextureLoader } from 'three';
 import pngTexture from './assets/logo_texture.png';
 import { printToFileAsync, selectPrinterAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
-import DatePicker from 'react-native-modern-datepicker'
+import DatePicker from 'react-native-modern-datepicker';
+import { Svg, Path } from 'react-native-svg';
 
 
 
@@ -89,6 +90,14 @@ export default function App() {
             headerShown: false ,
           }}// Set the title of the header
         />
+        <Stack.Screen
+          name="diagnostico"
+          component={DiagnosticoScreen}
+          options={{ 
+            title: '', 
+            headerShown: false ,
+          }}// Set the title of the header
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -139,28 +148,45 @@ const ProfileScreen = ({navigation}) => {
 
   return (
   <View style={styles.container}>
-    <Canvas style={styles.canvas} camera={{ position: [-2, 2.5, 5], fov: 30 }}>
+    <View style={styles.backButtonDiv}>
+     <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate('Home')}>
+        <View style={styles.iconTextContainer}>
+          <Svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1024 1024"
+            fill="#000000"
+            class="icon"
+            version="1.1"
+            style={styles.icon}>
+            <Path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill="" />
+          </Svg>
+          <Text style={styles.text}>Atrás</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+    <Canvas style={styles.canvas} camera={{ position: [-2, 1, 7], fov: 30 }}>
       <DynamicSphereModel />
     </Canvas>
     <View style={styles.backView}>
-
     </View>
     <View style={styles.buttonsContainer}>
       <Animated.View  style={{ transform: [{ translateY }] }}>
         <TouchableOpacity
-          style={[styles.buttonInit, { marginTop: '8%' }]}
+          style={[styles.buttonInit, { marginTop: '8%' , height: '26%'}]}
           onPress={() => navigation.navigate('listado')}>
-          <Text style={[styles.buttonText, { marginTop: '8%' }]}>Biomarcadores disponibles</Text>
+          <Text style={[styles.buttonText, { marginTop: '6%' }]}>Biomarcadores disponibles</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.buttonInit]}
+          style={[styles.buttonInit, { height: '26%'}]}
           onPress={() => navigation.navigate('algor')}>
-          <Text style={[styles.buttonText, { marginTop: '8%' }]}>Que prueba recomendar</Text>
+          <Text style={[styles.buttonText, { marginTop: '6%'}]}>¿Qué prueba recomendar?</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.buttonInit, { marginBottom: '8%' }]}
+          style={[styles.buttonInit, { marginBottom: '8%', height: '26%' }]}
           onPress={() => navigation.navigate('formulario')}>
-          <Text style={[styles.buttonText, { marginTop: '8%' }]}>Generar formulario SelectMDX</Text>
+          <Text style={[styles.buttonText, { marginTop: '6%' }]}>Generar formulario SelectMDX</Text>
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -190,20 +216,38 @@ const AlgoScreen = ({navigation}) => {
 
   return (
   <View style={styles.container}>
-    <View style={[styles.buttonsContainer , {marginTop: '1%', justifyContent: 'space-around'}]}>
-    <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Usos en la práctica clínica:</Text>
+    <View style={styles.backButtonDiv}>
+     <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate('Profile')}>
+        <View style={styles.iconTextContainer}>
+          <Svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1024 1024"
+            fill="#000000"
+            class="icon"
+            version="1.1"
+            style={styles.icon}>
+            <Path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill="" />
+          </Svg>
+          <Text style={styles.text}>Atrás</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+    <View style={[styles.buttonsContainer , { justifyContent: 'space-around'}]}>
+    <Text style={[styles.title, { marginBottom: '1%', marginTop: '10%' }]}>Usos en la práctica clínica:</Text>
       <Animated.View  style={{ transform: [{ translateY: translateY1 }] }}>
         <TouchableOpacity
           style={[styles.buttonInit, { height: '50%'}]}
-          onPress={() => navigation.navigate('buscador')}>
-          <Text style={[styles.buttonText, { marginTop: '4%' }]}>Diagnóstico</Text>
+          onPress={() => navigation.navigate('diagnostico')}>
+          <Text style={[styles.buttonText, { marginTop: '6%' }]}>Diagnóstico</Text>
         </TouchableOpacity>
       </Animated.View>
       <Animated.View  style={{ transform: [{ translateY: translateY2 }] }}>
         <TouchableOpacity
           style={[styles.buttonInit, { height: '50%' }]}
           onPress={() => navigation.navigate('tratamiento')}>
-          <Text style={[styles.buttonText, { marginTop: '4%' }]}>Pronóstico/Terapéutico</Text>
+          <Text style={[styles.buttonText, { marginTop: '6%' }]}>Pronóstico/Terapéutico</Text>
         </TouchableOpacity>
       </Animated.View >
     </View>
@@ -215,17 +259,23 @@ const AlgoScreen = ({navigation}) => {
 const TratamientoScreen = ({navigation}) => {
   const [translateY1] = useState(new Animated.Value(1000)); // Initial offset from top for first button (adjust as needed)
   const [translateY2] = useState(new Animated.Value(1000)); // Initial offset from bottom for second button (adjust as needed)
+  const [translateY3] = useState(new Animated.Value(1000)); // Initial offset from bottom for second button (adjust as needed)
 
   useEffect(() => {
     Animated.parallel([ // Use parallel animation for simultaneous movement
       Animated.timing(translateY1, {
-        toValue: 100, // Animate to the center (adjust offset for precise centering)
-        duration: 600, // Animation duration (adjust as desired)
+        toValue: 75, // Animate to the center (adjust offset for precise centering)
+        duration: 300, // Animation duration (adjust as desired)
         useNativeDriver: true, // Optimize performance (optional)
       }),
       Animated.timing(translateY2, {
+        toValue: 120, // Animate to the center (adjust offset for precise centering)
+        duration: 300, // Animation duration (adjust as desired)
+        useNativeDriver: true, // Optimize performance (optional)
+      }),
+      Animated.timing(translateY3, {
         toValue: 140, // Animate to the center (adjust offset for precise centering)
-        duration: 600, // Animation duration (adjust as desired)
+        duration: 300, // Animation duration (adjust as desired)
         useNativeDriver: true, // Optimize performance (optional)
       }),
     ]).start();
@@ -233,27 +283,114 @@ const TratamientoScreen = ({navigation}) => {
 
   return (
   <View style={styles.container}>
+    <View style={styles.backButtonDiv}>
+     <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate('algor')}>
+        <View style={styles.iconTextContainer}>
+          <Svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1024 1024"
+            fill="#000000"
+            class="icon"
+            version="1.1"
+            style={styles.icon}>
+            <Path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill="" />
+          </Svg>
+          <Text style={styles.text}>Atrás</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
     <View style={[styles.buttonsContainer , {marginTop: '1%', justifyContent: 'space-around'}]}>
-    <Text style={[styles.title, { marginBottom: '1%', marginTop: '20%' }]}>Tratamiento</Text>
-    <Text style={[{ marginBottom: '1%', marginTop: '20%', alignSelf: 'center', fontSize: 17, color: '#797979d0' }]}>Seleccione la situación clínica:</Text>
+    <Text style={[styles.title, { marginBottom: '13%', marginTop: '1%', }]}>Tratamiento</Text>
+    <Text style={[{ marginBottom: '1%', marginTop: '10%', alignSelf: 'center', fontSize: 17, color: '#797979d0' }]}>Seleccione la situación clínica:</Text>
       <Animated.View  style={{ transform: [{ translateY: translateY1 }] }}>
         <TouchableOpacity
-        style={[styles.buttonInit, { height: 'auto', marginTop: '2%' }]}
-        onPress={() => navigation.navigate('SearchResult', { protatect: true, biopsia: false})}>
-        <Text style={[styles.buttonText, { padding: '5%' }]}>Dispuesto a tratarlo con terapia ayduante posterior a la prostatectomia</Text>
+        style={[styles.buttonInit, { height: 'auto', marginTop: '4%' }]}
+        onPress={() => navigation.navigate('SearchResult', { biopsia: true, resultado: 'Positivo' })}>
+        <Text style={[styles.buttonText, { padding: '5%' }]}>Previo a <Text style={{ textDecorationLine: 'underline' }}>decidir</Text> tratamiento en Ca Prostáta bajo riesgo</Text>
         </TouchableOpacity>
       </Animated.View>
       <Animated.View  style={{ transform: [{ translateY: translateY2 }] }}>
         <TouchableOpacity
         style={[styles.buttonInit, { height: 'auto', marginBottom: '8%' }]}
-        onPress={() => navigation.navigate('SearchResult', { protatect: false, biopsia: true, resultado: "Positivo"})}>
-        <Text style={[styles.buttonText, { padding: '5%' }]}>Dispuesto a la prostatectomia</Text>
+        onPress={() => navigation.navigate('SearchResult', { protatect: true })}>
+        <Text style={[styles.buttonText, { padding: '5%' }]}>Previo a <Text style={{ textDecorationLine: 'underline' }}>decidir</Text> tratamiento en Ca Prostáta localizado</Text>
+        </TouchableOpacity>
+      </Animated.View >
+      <Animated.View  style={{ transform: [{ translateY: translateY3 }] }}>
+        <TouchableOpacity
+        style={[styles.buttonInit, { height: 'auto', marginBottom: '8%' }]}
+        onPress={() => navigation.navigate('SearchResult', { protatect: true })}>
+        <Text style={[styles.buttonText, { padding: '5%' }]}>Posterior a la prostatectomia radical para <Text style={{ textDecorationLine: 'underline' }}>decidir</Text> radioterapia de ayudante</Text>
         </TouchableOpacity>
       </Animated.View >
     </View>
   </View>
   );
 };
+
+const DiagnosticoScreen = ({navigation}) => {
+  const [translateY1] = useState(new Animated.Value(1000)); // Initial offset from top for first button (adjust as needed)
+  const [translateY2] = useState(new Animated.Value(1000)); // Initial offset from bottom for second button (adjust as needed)
+
+  useEffect(() => {
+    Animated.parallel([ // Use parallel animation for simultaneous movement
+      Animated.timing(translateY1, {
+        toValue: 75, // Animate to the center (adjust offset for precise centering)
+        duration: 300, // Animation duration (adjust as desired)
+        useNativeDriver: true, // Optimize performance (optional)
+      }),
+      Animated.timing(translateY2, {
+        toValue: 100, // Animate to the center (adjust offset for precise centering)
+        duration: 300, // Animation duration (adjust as desired)
+        useNativeDriver: true, // Optimize performance (optional)
+      }),
+    ]).start();
+  }, []);
+
+  return (
+  <View style={styles.container}>
+    <View style={styles.backButtonDiv}>
+     <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate('algor')}>
+        <View style={styles.iconTextContainer}>
+          <Svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1024 1024"
+            fill="#000000"
+            class="icon"
+            version="1.1"
+            style={styles.icon}>
+            <Path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill="" />
+          </Svg>
+          <Text style={styles.text}>Atrás</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+    <View style={[styles.buttonsContainer , {marginTop: '1%', justifyContent: 'space-around'}]}>
+    <Text style={[styles.title, { marginBottom: '1%', marginTop: '1%' }]}>Diagnóstico</Text>
+    <Text style={[{ marginBottom: '1%', marginTop: '10%', alignSelf: 'center', fontSize: 17, color: '#797979d0' }]}>Seleccione la situación clínica:</Text>
+      <Animated.View  style={{ transform: [{ translateY: translateY1 }] }}>
+        <TouchableOpacity
+        style={[styles.buttonInit, { height: 'auto', marginTop: '2%' }]}
+        onPress={() => navigation.navigate('SearchResult', { protatect: false, biopsia: false})}>
+        <Text style={[styles.buttonText, { padding: '5%' }]}>PSA de riesgo sin biopsia prostática</Text>
+        </TouchableOpacity>
+      </Animated.View>
+      <Animated.View  style={{ transform: [{ translateY: translateY2 }] }}>
+        <TouchableOpacity
+        style={[styles.buttonInit, { height: 'auto', marginBottom: '8%' }]}
+        onPress={() => navigation.navigate('SearchResult', { protatect: false, biopsia: true, resultado: "Negativo"})}>
+        <Text style={[styles.buttonText, { padding: '5%' }]}>PSA de riesgo con biopsia prostática negativa</Text>
+        </TouchableOpacity>
+      </Animated.View >
+    </View>
+  </View>
+  );
+};
+
 
 const ListadoScreen = ({ navigation }) => {
   const [translateY] = useState(new Animated.Value(1000));// Initial offset from bottom (adjust as needed)
@@ -268,6 +405,24 @@ const ListadoScreen = ({ navigation }) => {
 
   return (
     <View style={styles.containerListado}>
+    <View style={[styles.backButtonDiv, { paddingLeft: 20, paddingTop: 30,}]}>
+      <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate('Profile')}>
+          <View style={styles.iconTextContainer}>
+            <Svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1024 1024"
+              fill="#000000"
+              class="icon"
+              version="1.1"
+              style={styles.icon}>
+              <Path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill="" />
+            </Svg>
+            <Text style={styles.text}>Atrás</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
       <Text style={[styles.title, {color: '#fff'}]}>Listado de biomarcadores</Text>
       <Animated.View  style={{ transform: [{ translateY }] }}>
         <TouchableOpacity
@@ -363,13 +518,14 @@ const FormularioScreen = () => {
   const [openPsa, setOpenPsa] = useState(false)  
   let [fech_tact, setFechaTacto] = useState(null)
   const [openTact, setOpenTact] = useState(false) 
+  let [openInfo, setOpenInfo] = useState(false)
 
 
   const html = `
     <html>
       <body>
         <img src='./assets/selectmdx.png' />
-        <h3 style="text-align: center; margin-bottom: 2%;">Dia y hora de la extracción de la muestra: ${fecha}</h3>
+        <h3 style="text-align: center; margin-bottom: 2%;">Dia y hora de la extracción de la muestra: ${fecha} ${hora}</h3>
         <h2 style="margin-bottom: 1.5%;">Informacion del Paciente:</h2>
         <p style="color: #313131; padding: 10; margin-left: 15;">Nombre del paciente: ${nombre}</p>
         <p style="color: #313131; padding: 10; margin-left: 15;">Fecha de Nacimiento: ${born}</p>
@@ -723,13 +879,13 @@ const FormularioScreen = () => {
         <View>
           <View style={[styles.picker, {flexDirection: 'row',}]}>
             <TouchableOpacity
-              style={[styles.tabButton, {width: '40%', marginTop: 15, marginBottom: 5}, raza === 'Caucásico' && styles.selectedTab]}
+              style={[styles.tabButton, {width: '45%', marginTop: 15, marginBottom: 5}, raza === 'Caucásico' && styles.selectedTab]}
               onPress={() => setRaza('Caucásico')}
             >
               <Text style={[styles.tabText, {fontSize: 12}]}>Caucásico</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.tabButton, {width: '40%', marginTop: 15, marginBottom: 5}, raza === 'Nativo Americano' && styles.selectedTab]}
+              style={[styles.tabButton, {width: '45%', marginTop: 15, marginBottom: 5}, raza === 'Nativo Americano' && styles.selectedTab]}
               onPress={() => setRaza('Nativo Americano')}
             >
               <Text style={[styles.tabText, {fontSize: 12}]}>Nativo Americano</Text>
@@ -738,25 +894,65 @@ const FormularioScreen = () => {
           </View>
           <View style={[styles.picker, {flexDirection: 'row',}]}>
             <TouchableOpacity
-              style={[styles.tabButton, {width: '40%', marginBottom: 15, marginTop: 5,}, raza === 'Afrodescendiente' && styles.selectedTab]}
+              style={[styles.tabButton, {width: '45%', marginBottom: 15, marginTop: 5,}, raza === 'Afrodescendiente' && styles.selectedTab]}
               onPress={() => setRaza('Afrodescendiente')}
             >
               <Text style={[styles.tabText, {fontSize: 12}]}>Afrodescendiente</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.tabButton, {width: '40%', marginBottom: 15, marginTop: 5,}, raza === 'Asiático' && styles.selectedTab]}
+              style={[styles.tabButton, {width: '45%', marginBottom: 15, marginTop: 5,}, raza === 'Asiático' && styles.selectedTab]}
               onPress={() => setRaza('Asiático')}
             >
               <Text style={[styles.tabText, {fontSize: 12}]}>Asiático</Text>
             </TouchableOpacity>
           </View>
         </View>
+      <View style={styles.horizontalLine}/>
+
+      <Text style={styles.formText}>¿El paciente esta bajo tratamiento de 5-α-reductasa?</Text>
+        <View style={[styles.picker, {flexDirection: 'row',}]}>
+          <TouchableOpacity
+            style={[styles.tabButton, {width: '50%', marginVertical: 15}, unidad === 'cc' && styles.selectedTab]}
+            onPress={() => setOpenInfo(true)}
+          >
+            <Text style={styles.tabText}>Si</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tabButton, {width: '50%', marginVertical: 15}, openInfo === false && styles.selectedTab]}
+            onPress={() => setOpenInfo(false)}
+          >
+            <Text style={styles.tabText}>No</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.centeredView, { height: 1,}]}>
+              <Modal
+                animationType='slide'
+                transparent={true}
+                visible={openInfo}
+                style={{marginTop: '20%'}}
+              >
+                <View style={styles.centeredView}>
+                  <View style={[styles.modalView, { textAlign: 'center'}]}>
+                    <Text style={{ padding: 5, fontSize: 20, textAlign: 'center', fontWeight: 'bold', color: '#fd1b1b',}}>Atención.</Text>
+                    <Text style={{ padding: 15, fontSize: 18, textAlign: 'center', fontWeight: 'bold', color: '#c23737',}}>Los resultados de esta prueba son afectado por inhibidores de la 5-α-reductasa. Requiere interrupcción del tratamiento por al menos 6 meses.</Text>
+                    <TouchableOpacity
+                      style={[styles.buttonClose, {marginBottom:'5%', backgroundColor: '#c23737'}]}
+                      onPress={() => setOpenInfo(false)}
+                    >
+                      <Text style={styles.buttonText}>Listo</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
+            </View>
+        <View style={styles.horizontalLine}/>
+
       </View>
       <View style={{marginBottom: '30%',}}>
         <TouchableOpacity
-          style={[styles.buttonIniciar, { height: '17%', marginTop: '1%' }]}
+          style={[styles.buttonIniciar, { height: '17%', marginTop: '4%' }]}
           onPress={GeneratePDF}>
-          <Text style={[styles.buttonText, { marginTop: '7%' }]}>Generar PDF</Text>
+          <Text style={[styles.buttonText, { marginTop: '10%' }]}>Generar PDF</Text>
         </TouchableOpacity>
       </View>
       </ScrollView>
@@ -857,6 +1053,24 @@ const TestScreen = ({navigation, route}) =>{
   return (
     <ScrollView>
       <View style={styles.containerTabs}>
+      <View style={[styles.backButtonDiv, { padding: 10, paddingLeft: 25, paddingTop: 20,}]}>
+      <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate('listado')}>
+          <View style={styles.iconTextContainer}>
+            <Svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1024 1024"
+              fill="#000000"
+              class="icon"
+              version="1.1"
+              style={styles.icon}>
+              <Path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill="" />
+            </Svg>
+            <Text style={styles.text}>Atrás</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
         <Image
             source={imageSource}
             style={[styles.imageForTest, { resizeMode: 'contain' }]} // Add resizeMode prop
@@ -878,7 +1092,7 @@ const TestScreen = ({navigation, route}) =>{
           <TouchableOpacity
             style={[styles.tab, selectedTab === 1 && styles.selectedTab]}
             onPress={() => handleTabPress(1)}>
-            <Text style={styles.tabText}>INFORMACION</Text>
+            <Text style={styles.tabText}>INFORMACIÓN</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.tab, selectedTab === 2 && styles.selectedTab]}
@@ -1005,9 +1219,48 @@ const SearchScreen = ({navigation}) => {
 const SearchresultScreen = ({ route, navigation }) => {
   const {protatect, biopsia, resultado, riesgo } = route.params
 
-  console.log(biopsia && resultado === 'Positivo' && riesgo === 'Bajo')
 return (
   <View style={[styles.containerListado, {flex: 1, justifyContent: 'flex-start'}]}>
+      { ((!protatect && !biopsia) || (biopsia && resultado === 'Negativo')) && (
+      <View style={[styles.backButtonDiv, { padding: 10, paddingLeft: 25, paddingTop: 20,}]}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate('diagnostico')}>
+          <View style={styles.iconTextContainer}>
+            <Svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1024 1024"
+              fill="#000000"
+              class="icon"
+              version="1.1"
+              style={styles.icon}>
+              <Path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill="" />
+            </Svg>
+            <Text style={styles.text}>Atrás</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      )}
+      { ((protatect) || (biopsia && resultado === 'Positivo')) && (
+      <View style={[styles.backButtonDiv, { padding: 10, paddingLeft: 25, paddingTop: 20,}]}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate('tratamiento')}>
+          <View style={styles.iconTextContainer}>
+            <Svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1024 1024"
+              fill="#000000"
+              class="icon"
+              version="1.1"
+              style={styles.icon}>
+              <Path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill="" />
+            </Svg>
+            <Text style={styles.text}>Atrás</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      )}
     <Text style={[styles.title, {marginTop: '20%'}]}>COINCIDENCIAS ENCONTRADAS:</Text>
       { !protatect && !biopsia && (
       <TouchableOpacity
@@ -1069,21 +1322,6 @@ return (
           </View>
       </TouchableOpacity>
       )}
-      { biopsia && resultado === 'Positivo' && (
-          <TouchableOpacity
-              style={styles.buttonListado}
-              onPress={() => navigation.navigate('tests', {
-                testName: "Decipher"
-              })}>
-              <View style={styles.buttonListadoContent}>
-              <Image
-                  source={require('./assets/decipher.png')}
-                  style={[styles.image, { resizeMode: 'contain' }]}
-              />
-              <Text style={styles.buttonListadoText}>Genomic Classifier (GC)</Text>
-              </View>
-          </TouchableOpacity>
-      )}
       { protatect && (
           <TouchableOpacity
               style={styles.buttonListado}
@@ -1111,6 +1349,8 @@ const DynamicSphereModel = () => {
   const [rotation, setRotation] = useState(0);
   const rotationSpeed = 0.1;
   const fullRotation = Math.PI * 2;
+  const moveSpeed = 0.01; // Speed to move down on the y-axis
+
 
   useFrame(() => {
       // Rotate the sphere
@@ -1125,12 +1365,12 @@ const DynamicSphereModel = () => {
           // Stop rotating
           sphereRef.current.rotation.y = fullRotation;
           sphereRef.current.position.x = 0;
-      }
+    }
   });
 
   return (
-      <mesh ref={sphereRef} position={[-1 , 0, 0]}>
-          <sphereGeometry args={[1, 32, 32]} />
+      <mesh ref={sphereRef} position={[-1 , -1.2, 0]}>
+          <sphereGeometry args={[0.5, 32, 32]} />
           <meshBasicMaterial map={texture} />
       </mesh>
   );
@@ -1188,7 +1428,7 @@ const SphereModel = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '10%',
+    paddingTop: '10%',
     backgroundColor: '#eaeaea',
     shadowColor: '#000',
     shadowOffset: {
@@ -1225,13 +1465,47 @@ const styles = StyleSheet.create({
   },
   canvas: {
     position: 'absolute',
-    top: 0,
+    top: 70,
     left: 0,
     right: 0,
-    bottom: 350,
+    bottom: 0,
+  },
+  backButtonDiv: {
+    flex: 0.3,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  backButton: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    marginRight: '80%',
+    paddingTop: 10,
+    height: 50,
+  },
+  iconTextContainer: {
+    flexDirection: 'row',
+  },
+  icon: {
+    marginTop: 8,
+    alignSelf: 'flex-start',
+    paddingRight: 1,
+    width: 60,
+    height: 35,
+  },
+  text: {
+    fontSize: 16,
+    marginTop: 13,
+    marginRight: 50,
+    alignSelf: 'flex-start',
+
   },
   backView: {
-    height: '50%'
+    position: 'absolute',
+    top: 100,
+    left: 0,
+    right: 0,
+    bottom: 300,
+    height: '35%',
   },
   containerTabs: {
     flex: 1,
@@ -1287,12 +1561,9 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: 'column',
-    height: '38%',
+    height: '40%',
     borderRadius: 55,
-    margin: '10%',
     padding: '8%',
-    matginTop: '30%',
-    justifyContent: 'center'
   },
   title: {
     textAlign: 'center',
@@ -1330,7 +1601,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
     elevation: 5,
-    paddingBottom: 40,
+    paddingTop: 20,
+    flex: 1,
   },
   buttonListado: {
     width: '80%',
@@ -1400,10 +1672,10 @@ const styles = StyleSheet.create({
       borderColor: "grey",
   },
   tabButton: {
-    maxWidth: '40%',
+    maxWidth: '45%',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    marginHorizontal: 15,
+    marginHorizontal: 10,
     marginVertical: 5,
     borderRadius: 5,
     borderWidth: 1,
@@ -1528,14 +1800,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginTop: 15,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.20,
-    shadowRadius: 3.84,
-    elevation: 5,
+
     marginBottom: 25,
   },
   centeredView: {
@@ -1581,6 +1846,7 @@ const styles = StyleSheet.create({
   },
   formText: {
     fontWeight: 'bold',
+    fontSize:15,
     color: '#010a5c'
   },
   horizontalLine:{

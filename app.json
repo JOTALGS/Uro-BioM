@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Uro-bioM",
-    "slug": "9-sidexpo",
-    "version": "1.0.1",
+    "slug": "urobiom",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,11 +19,12 @@
       "bundleIdentifier": "com.jota.uro"
     },
     "android": {
+      "package": "com.android.uro",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.jota.uro"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
