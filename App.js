@@ -13,6 +13,8 @@ import { Svg, Path } from 'react-native-svg';
 
 
 
+
+
 const Stack = createNativeStackNavigator();
 const backColor = '#0081a1'
 
@@ -240,14 +242,14 @@ const AlgoScreen = ({navigation}) => {
         <TouchableOpacity
           style={[styles.buttonInit, { height: '50%'}]}
           onPress={() => navigation.navigate('diagnostico')}>
-          <Text style={[styles.buttonText, { marginTop: '6%' }]}>Diagnóstico</Text>
+          <Text style={[styles.buttonText, { marginTop: '5%' }]}>Diagnóstico</Text>
         </TouchableOpacity>
       </Animated.View>
       <Animated.View  style={{ transform: [{ translateY: translateY2 }] }}>
         <TouchableOpacity
           style={[styles.buttonInit, { height: '50%' }]}
           onPress={() => navigation.navigate('tratamiento')}>
-          <Text style={[styles.buttonText, { marginTop: '6%' }]}>Pronóstico/Terapéutico</Text>
+          <Text style={[styles.buttonText, { marginTop: '5%' }]}>Pronóstico/Terapéutico</Text>
         </TouchableOpacity>
       </Animated.View >
     </View>
@@ -545,7 +547,8 @@ const FormularioScreen = () => {
         <p style="text-align: center; position: fixed; bottom: 0; width: 100%;">Av. Italia 2364 of. 304, Tel: 598 2487 89 95 / Email: infouy@southgenetics.com</p>
       </body>
     </html>
-  `;
+  `
+  
 
   const handleChange = (fecha) => {
     setFecha(fecha)
@@ -984,9 +987,17 @@ const TestScreen = ({navigation, route}) =>{
   if (test && test.testName === '4KScore') {
     let AKScoreImage = require('./assets/4kscore.png')
     imageSource = AKScoreImage;
+    let graph1 = require('./assets/graph1.png')
+    graph1Source = graph1;
+    let graph2 = require('./assets/graph2.png')
+    graph2Source = graph2;
   } else if (test && test.testName === 'SelectMDX') {
     let SelectMDXImage = require('./assets/selectmdx.png')
     imageSource = SelectMDXImage;
+    let graph1select = require('./assets/graph1select.png')
+    graph1Source = graph1select;
+    let graph2 = require('./assets/graph2.png')
+    graph2Source = graph2;
   } else if (test && test.testName === 'ConfirmMDX') {
     let ConrmMDXImage = require('./assets/confirmmdx.png')
     imageSource = ConrmMDXImage;
@@ -1009,14 +1020,71 @@ const TestScreen = ({navigation, route}) =>{
       <>
           {test && (
               <Text style={[styles.tabContentText]}>
-                  {test.informacion}
-                  <Text
-                      style={{ color: 'blue', textDecorationLine: 'underline' }}
-                      onPress={() => Linking.openURL('mailto:infouy@southgenetics.com')}
-                  >
-                      infouy@southgenetics.com
-                  </Text>
-                  {"\n"}
+                  {test.informacion0}
+                  <View style={styles.graphDiv}>
+                    <Image
+                        source={graph1Source}
+                        style={[styles.graphImage, { resizeMode: 'contain' }]}
+                    />
+                  </View>
+                  {test.informacion1}
+                  { (test.testName === '4KScore') && (
+                    <>
+                      <Text
+                          style={{ color: 'blue', textDecorationLine: 'underline' }}
+                          onPress={() => Linking.openURL('https://suo--abstracts-secure--platform-com.translate.goog/a/gallery/rounds/1/details/387?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=sc')}
+                      >
+                          Society of Urologic Oncology - THE 4KSCORE TEST AND SELECTMDX DO NOT INFORM DECISION WHETHER TO OBTAIN A MULTI-PARAMETRIC MRI IN MEN WITH  ELEVATED PSA
+                      </Text>
+                      {"\n\n"}
+                      <Text
+                          style={{ color: 'blue', textDecorationLine: 'underline' }}
+                          onPress={() => Linking.openURL('https://www.auajournals.org/doi/10.1097/JU.0000000000002102.19')}
+                      >
+                          MP62-19 THE PERFORMANCE OF MPMRI AND THE 4KSCORE FOR PREDICTING PROGRESSION ON ACTIVE SURVEILLANCE: RESULTS FROM A SINGLE INSTITUTION PROSPECTIVE STUDY
+                      </Text>
+                      {"\n\n"}
+                      <Text
+                          style={{ color: 'blue', textDecorationLine: 'underline' }}
+                          onPress={() => Linking.openURL('mailto:infouy@southgenetics.com')}
+                      >
+                          Para solicitar más información de esta prueba por mail, click aquí.
+                      </Text>
+                      {"\n"}
+                    </>
+                  )}
+                  { (test.testName === 'SelectMDX') && (
+                    <>
+                      <Text
+                          style={{ color: 'blue', textDecorationLine: 'underline' }}
+                          onPress={() => Linking.openURL('https://mdxhealth.com/select-mdx-for-physicians/')}
+                      >
+                          Select mdx for Physicians - mdxhealth
+                      </Text>
+                      {"\n\n"}
+                      <Text
+                          style={{ color: 'blue', textDecorationLine: 'underline' }}
+                          onPress={() => Linking.openURL('http://www.cancer.gov/types/prostate/psa-fact-sheet3')}
+                      >
+                          American Cancer Society. PSA Test National Cancer Institute 
+                      </Text>
+                      {"\n\n"}
+                      <Text
+                          style={{ color: 'blue', textDecorationLine: 'underline' }}
+                          onPress={() => Linking.openURL('www.seer.cancer.gov/statfacts/html/prost.html')}
+                      >
+                          Loeb et al.;  J Urol. 2011.6- NCI Seer Data 2015.
+                      </Text>
+                      {"\n\n"}                      
+                      <Text
+                          style={{ color: 'blue', textDecorationLine: 'underline' }}
+                          onPress={() => Linking.openURL('mailto:infouy@southgenetics.com')}
+                      >
+                          Para solicitar más información de esta prueba por mail, click aquí.
+                      </Text>
+                      {"\n"}
+                    </>
+                  )}
               </Text>
           )}
       </>
@@ -1038,6 +1106,12 @@ const TestScreen = ({navigation, route}) =>{
       <>
         {test && (
         <Text style={styles.tabContentText}>
+          <View style={[styles.graphDiv, { paddingRight: 20,}]}>
+            <Image
+                source={graph2Source}
+                style={[styles.graphImage, { resizeMode: 'contain' }]}
+            />
+          </View>
           {test.logistica}
         </Text>
         )}
@@ -1853,6 +1927,15 @@ const styles = StyleSheet.create({
     borderBottomColor: '#454645',
     borderBottomWidth: StyleSheet.hairlineWidth,
     marginBottom: 10,
-  }
+  },
+  graphDiv: {
+    left: 500,
+    width: 100,
+    paddingRight: 15,
+  },
+  graphImage: {
+    width: '370%',
+    height: 210,
+  },
 
 });
