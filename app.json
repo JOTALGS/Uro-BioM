@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Uro-bioM",
-    "slug": "urobiom",
+    "slug": "9-sidexpo",
     "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -33,6 +33,9 @@
       "eas": {
         "projectId": "9190d253-c4ea-48e6-b182-8ea00a8ce91e"
       }
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
